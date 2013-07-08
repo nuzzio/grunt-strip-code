@@ -44,8 +44,8 @@ module.exports = function(grunt) {
       },
       start_end_options: {
         options: {
-          startComment: '{test}',
-          endComment: '{/test}',
+          start_comment: '{test}',
+          end_comment: '{/test}',
         },
         src: 'tmp/start_end_options.js',
       },

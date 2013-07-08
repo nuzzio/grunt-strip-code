@@ -16,14 +16,14 @@ module.exports = function(grunt) {
   grunt.registerMultiTask("strip_code", "Strip code matching a specified patterna.", function(target) {
 
     var options = this.options({
-          startComment: "test-code",
-          endComment: "end-test-code"
+          start_comment: "test-code",
+          end_comment: "end-test-code"
         })
       , pattern = options.pattern || new RegExp(
             "[\\t ]*\\/\\* ?"
-          + options.startComment
+          + options.start_comment
           + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
-          + options.endComment
+          + options.end_comment
           + " ?\\*\\/[\\t ]*\\n?"
           , "g"
         );

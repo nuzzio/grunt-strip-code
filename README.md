@@ -47,17 +47,42 @@ The text inside the opening comment used to identify code to strip.
 
 #### options.end_comment
 Type: `String`
-Default value: `'.'`
+Default value: `end-test-code`
 
 The text inside the closing comment used to identify code to strip.
 
 #### options.pattern
-Type: `String`
+Type: `RegExp`
 Default value: (a generated RegExp matching the start and end comment)
 
-If you want to strip code but don't want to wrap the code in start and end comments, you can supply your own RegExp to match. If `pattern` is specified, `start_comment` and `end_comment` are ignored.
+If you want to strip code but don't want to wrap the code in start and end comments, you can supply your own RegExp to match against. If the `pattern` option is specified, the `start_comment` and `end_comment` options are ignored.
 
 ### Usage Examples
+
+The following source code exposes the `bar` function to the public API for testing, but the `bar` function should not be accessible in the released library. grunt-strip-code (with the default options) will remove the comment blocks from the example below keeping the `bar` function private in production:
+
+```js
+(function() {
+
+  function bar() {
+    doSomething();
+  }
+
+  var api = {
+    foo: function() {
+      bar();
+      return "foo";
+    }
+  }
+
+  /* test-code */
+  api._bar = bar;
+  /* end-test-code */
+
+  return api;
+}());
+```
+
 
 #### Using custom start and end comments
 The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment from all `.js` files in the `dist/` folder.
@@ -89,7 +114,7 @@ grunt.initConfig({
 })
 ```
 
-#### Specifying `src` and `dest` files.
+#### Specifying source and destination.
 
 The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.
 
@@ -110,6 +135,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-=== 0.1.0
+#### 0.1.0
 
 * First Release

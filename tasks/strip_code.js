@@ -36,15 +36,17 @@ module.exports = function(grunt) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return;
         }
-        // strip test blocks from the file
-        var contents = grunt.file.read(filepath).replace(pattern, "");
-        // save file and print a success message.
-        if (f.dest) {
-          grunt.file.write(f.dest, contents);
-          grunt.log.writeln("Stripped code from " + filepath + " and saved to " + f.dest);
-        } else {
-          grunt.file.write(filepath, contents);
-          grunt.log.writeln("Stripped code from " + filepath);
+        var contents = grunt.file.read(filepath)
+          , replacement = contents.replace(pattern, "");
+        // if replacement is different than contents, save file and print a success message.
+        if (contents != replacement) {
+          if (f.dest) {
+            grunt.file.write(f.dest, replacement);
+            grunt.log.writeln("Stripped code from " + filepath + " and saved to " + f.dest);
+          } else {
+            grunt.file.write(filepath, replacement);
+            grunt.log.writeln("Stripped code from " + filepath);
+          }
         }
       });
     });

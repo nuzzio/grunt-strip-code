@@ -1,8 +1,16 @@
 # grunt-strip-code
 
-The grunt-strip-code plugin is used to strip code from production builds that is only needed in development and test environments. grunt-strip-code uses start and end coments to identify the code sections to strip out.
+The grunt-strip-code plugin is used to remove sections of code from production builds that are only needed in development and test environments. grunt-strip-code uses start and end comments to identify the code sections to strip out. For example:
 
-A sample use case for dev or test only code is to expose hidden functions for unit testing without exposing them in production. [This article](http://philipwalton.com/articles/how-to-test-private-javascript-functions/) explains the concept and implementation.
+```js
+/* test-code */
+removeMeInProduction();
+/* end-test-code */
+
+doNotRemoveMe();
+```
+
+A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
@@ -53,9 +61,9 @@ The text inside the closing comment used to identify code to strip.
 
 #### options.pattern
 Type: `RegExp`
-Default value: (a generated RegExp matching the start and end comment)
+Default value: (a generated RegExp matching the start and end comments)
 
-If you want to strip code but don't want to wrap the code in start and end comments, you can supply your own RegExp to match against. If the `pattern` option is specified, the `start_comment` and `end_comment` options are ignored.
+If the default start and end comment matching doesn't work for you needs, you can supply your own RegExp to match against. If the `pattern` option is specified, the `start_comment` and `end_comment` options are ignored.
 
 ### Usage Examples
 
@@ -84,7 +92,7 @@ The following source code exposes the `bar` function to the public API for testi
 ```
 
 
-#### Using custom start and end comments
+#### Specifying different start and end comment values
 The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment from all `.js` files in the `dist/` folder.
 
 ```js
@@ -123,8 +131,8 @@ grunt.initConfig({
   strip_code: {
     options: { },
     files: [
-      {src: 'dist/my-app-test.js', dest: 'my-app.js'},
-      {src: 'dist/my-lib-test.js', dest: 'my-lib.js'},
+      {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
+      {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'},
     ],
   },
 })

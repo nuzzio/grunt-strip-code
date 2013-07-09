@@ -143,6 +143,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+#### 0.1.1
+
+* Fix a bug so it only overwrites a file is there was stripped code.
+
 #### 0.1.0
 
 * Initial Release

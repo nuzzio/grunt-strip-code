@@ -1,7 +1,7 @@
 {
   "name": "grunt-strip-code",
   "description": "Remove dev and test only code in production builds",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/philipwalton/grunt-strip-code",
   "author": {
     "name": "Philip Walton",

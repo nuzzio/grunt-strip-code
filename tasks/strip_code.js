@@ -13,20 +13,34 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask("strip_code", "Strip code matching a specified patterna.", function(target) {
-
+  grunt.registerMultiTask("strip_code", "Strip code matching a specified pattern.", function(target) {
     var options = this.options({
           start_comment: "test-code",
           end_comment: "end-test-code"
         })
-      , pattern = options.pattern || new RegExp(
-            "[\\t ]*\\/\\* ?"
-          + options.start_comment
-          + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
-          + options.end_comment
-          + " ?\\*\\/[\\t ]*\\n?"
-          , "g"
-        );
+      , pattern = options.pattern || (function() {
+          // return a different RegEx depending on whether a custom identifier has been provided
+          if (options.custom_start_identifier) {
+            return new RegExp(
+                "[\\t ]* ?"
+              + options.custom_start_identifier
+              + " ?[\\s\\S]*?"
+              + options.custom_end_identifier
+              + " ?"
+              , "g"
+            );
+          } else {
+            return new RegExp(
+                 "[\\t ]*\\/\\* ?"
+               + options.start_comment
+               + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
+               + options.end_comment
+               + " ?\\*\\/[\\t ]*\\n?"
+               , "g"
+             );
+          }
+        })();
+
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
@@ -39,7 +53,7 @@ module.exports = function(grunt) {
         var contents = grunt.file.read(filepath)
           , replacement = contents.replace(pattern, "");
         // if replacement is different than contents, save file and print a success message.
-        if (contents != replacement) {
+        if (contents !== replacement) {
           if (f.dest) {
             grunt.file.write(f.dest, replacement);
             grunt.log.writeln("Stripped code from " + filepath + " and saved to " + f.dest);

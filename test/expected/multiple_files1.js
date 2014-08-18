@@ -3,7 +3,9 @@
   var foo;
 
 
+
   return {
     bar: "bar"
+
   };
 }());

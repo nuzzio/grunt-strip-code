@@ -132,9 +132,9 @@ grunt.initConfig({
     options: {
       custom_start_identifier: '// debug_start',
       custom_end_identifier: '// debug_end'
-  },
-  src: 'dist/*.js'
-}
+    },
+    src: 'dist/*.js'
+  }
 });
 ```
 

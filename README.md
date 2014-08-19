@@ -122,7 +122,7 @@ grunt.initConfig({
 })
 ```
 
-### Using a custom identifier
+#### Using a custom identifier
 
 Functionally similar to using your own pattern, but abstracts away a regular expression. The following will remove blocks starting with `// debug_start` and ending with `// debug_end` from all the `.js` files in the `dist/` folder.
 

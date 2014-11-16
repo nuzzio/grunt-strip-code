@@ -47,23 +47,38 @@ grunt.initConfig({
 
 ### Options
 
-#### options.start_comment
+
+#### options.blocks
+Type: `Array`
+Default value:
+
+```js
+blocks: [
+    {
+        start_block: "/* test-code */",
+        end_block: "/* end-test-code */"
+    }
+]
+```
+The `blocks` array contains one or more objects which define the boundaries of the text blocks to be deleted.
+
+#### options.blocks.start_block
 Type: `String`
-Default value: `test-code`
+Default value: `/** test-code **/`
 
-The text inside the opening comment used to identify code to strip.
+The text of the opening comment used to identify code to strip.
 
-#### options.end_comment
+#### options.blocks.end_block
 Type: `String`
-Default value: `end-test-code`
+Default value: `/** end-test-code **/`
 
-The text inside the closing comment used to identify code to strip.
+The text of the closing comment used to identify code to strip.
 
 #### options.pattern
 Type: `RegExp`
 Default value: (a generated RegExp matching the start and end comments)
 
-If the default start and end comment matching doesn't work for you needs, you can supply your own RegExp to match against. If the `pattern` option is specified, the `start_comment` and `end_comment` options are ignored.
+If the default start and end comment matching doesn't work for you needs, you can supply your own RegExp to match against. If the `pattern` option is specified, `options.blocks` are ignored.
 
 ### Usage Examples
 
@@ -93,14 +108,22 @@ The following source code exposes the `bar` function to the public API for testi
 
 
 #### Specifying different start and end comment values
-The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment from all `.js` files in the `dist/` folder.
+The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment, and code that begins with the `<!-- start-html-test-code -->` comment and ends with the `<!-- end-html-test-code -->` comment from all `.js` files in the `dist/` folder.
 
 ```js
 grunt.initConfig({
   strip_code: {
     options: {
-      start_comment: 'start-test-block',
-      end_comment: 'end-test-block',
+      blocks: [
+        {
+          start_block: "/* start-test-block */",
+          end_block: "/* end-test-block */"
+        },
+        {
+          start_block: "<!-- start-html-test-code -->",
+          end_block: "<!-- end-html-test-code -->"
+        }
+      ]
     },
     src: 'dist/*.js'
   },
@@ -130,10 +153,12 @@ The normal behavior is to strip out code in the source files and then save those
 grunt.initConfig({
   strip_code: {
     options: { },
-    files: [
-      {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
-      {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'},
-    ],
+    your_target: {
+      files: [
+        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
+        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'},
+      ]
+    }
   },
 })
 ```

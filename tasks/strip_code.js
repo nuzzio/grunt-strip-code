@@ -11,25 +11,39 @@
 var escapeStringRegexp = require('escape-string-regexp');
 var last = require('array-last');
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var taskDescr = 'Strip code matching a specified pattern.';
 
-    grunt.registerMultiTask('strip_code', taskDescr, function(target) {
+    grunt.registerMultiTask('strip_code', taskDescr, function (target) {
         var blocks = [];
         var regexps = null;
         var patterns = [];
         var blockStats = [];
         var blocksStack = [];
         var currentFile = null;
+        var strings = {};
+
+        strings.en_us = {
+            "missing.end.block": "Missing end block: in file `%f` at line %n for start block `%p`.",
+            "missing.start.block": "Missing start block: in file `%f` at line %n for end block `%p`.",
+            "extra.start.block": "Extra start block: In file `%f` at line %n end block `%p` is closed. " +
+            "However before it there is another start block"
+        };
+        var errors = [];
+
+        errors[1] = "missing.end.block";
+        errors[2] = "missing.start.block";
+        errors[3] = "extra.start.block";
+
 
         var options = this.options({
             intersectionCheck: false,
             parityCheck: false,
-
+            locale: 'en_us',
             patterns: [],
             blocks: [{
                 start_block: '/* test-code */',
-                end_block:   '/* end-test-code */'
+                end_block: '/* end-test-code */'
             }]
         });
 
@@ -41,7 +55,7 @@ module.exports = function(grunt) {
         }
 
         // filter blocks
-        blocks = blocks.filter(function(raw_blocks) {
+        blocks = blocks.filter(function (raw_blocks) {
             var isBlocksValid = typeof raw_blocks.start_block === 'string' &&
                 raw_blocks.start_block && raw_blocks.end_block &&
                 (raw_blocks.start_block !== raw_blocks.end_block);
@@ -62,7 +76,7 @@ module.exports = function(grunt) {
         }
 
         // filter patterns
-        patterns = patterns.filter(function(pattern) {
+        patterns = patterns.filter(function (pattern) {
             var isPatternValid = pattern && pattern instanceof RegExp;
 
             if (isPatternValid === false) {
@@ -91,27 +105,22 @@ module.exports = function(grunt) {
             return {
                 block: new RegExp(regexpStr.join(''), 'g'),
                 start: new RegExp(regexpStr[1]),
-                end:   new RegExp(regexpStr[3])
+                end: new RegExp(regexpStr[3])
             };
         });
 
         // concat all regexps into single array
         regexps = [].concat(
-            patterns, blocks.map(function(item) { return item.block; })
+            patterns, blocks.map(function (item) {
+                return item.block;
+            })
         );
 
-        // function that prints error message and quits
-        var makeWarn = function(params) {
-            var messages = [
-                'In file `%f` at line %n start block `%p` does not have' +
-                    ' its end block pair',
-                'In file `%f` at line %n end block `%p` does not have' +
-                    ' its start block pair',
-                'In file `%f` at line %n end block `%p` is closed. However' +
-                    ' before it there is another start block'
-            ];
 
-            var message = messages[params.caseNum - 1]
+        // function that prints error message and quits
+        var generateMessage = function (params) {
+
+            var message = strings[options.locale][error[params.caseNum - 1]]
                 .replace('%n', (params.lineNum + 1).toString())
                 .replace('%p', params.pattern.source)
                 .replace('%f', currentFile);
@@ -121,20 +130,20 @@ module.exports = function(grunt) {
 
         // function that is being called to check each line of the file
         // holds 3 subfunctions that does specific checks
-        var checkLine = function(line, lineNum) {
+        var checkLine = function (line, lineNum) {
             if (line.trim() === '') {
                 return;
             }
 
             // function that checks if amount of start/end blocks
             // are equal.
-            var checkBlocksParity = function(blockDef, blockIdx) {
+            var checkBlocksParity = function (blockDef, blockIdx) {
                 var block = blockStats[blockIdx];
 
                 // 'if' for start block check
                 if (blockDef.start.test(line) === true) {
                     if (block.startCount > block.endCount) {
-                        makeWarn({
+                        generateMessage({
                             pattern: blockDef.start,
                             lineNum: block.lastStartLine,
                             caseNum: 1
@@ -148,7 +157,7 @@ module.exports = function(grunt) {
                 // 'if' for end block check
                 if (blockDef.end.test(line) === true) {
                     if (block.endCount >= block.startCount) {
-                        makeWarn({
+                        generateMessage({
                             pattern: blockDef.end,
                             lineNum: blockDef.lastEndLine,
                             caseNum: 2
@@ -162,7 +171,7 @@ module.exports = function(grunt) {
 
             // function that checks if any two (or more) pairs of start/end
             // blocks are intersection.
-            var checkBlocksIntersection = function(blockDef, blockIdx) {
+            var checkBlocksIntersection = function (blockDef, blockIdx) {
                 if (blockDef.start.test(line)) {
                     blocksStack.push([blockIdx, lineNum]);
                 }
@@ -171,7 +180,7 @@ module.exports = function(grunt) {
                     if (last(blocksStack)[0] === blockIdx) {
                         blocksStack.pop();
                     } else {
-                        makeWarn({
+                        generateMessage({
                             pattern: blockDef.start,
                             lineNum: last(blocksStack)[1],
                             caseNum: 3
@@ -211,13 +220,13 @@ module.exports = function(grunt) {
 
                 // create an structure that will hold stats while each file
                 // is being checked
-                blockStats = blocks.map(function() {
+                blockStats = blocks.map(function () {
                     return {
                         startCount: 0,
-                        endCount:   0,
+                        endCount: 0,
 
                         lastStartLine: null,
-                        lastEndLine: null,
+                        lastEndLine: null
                     };
                 });
 
@@ -225,7 +234,7 @@ module.exports = function(grunt) {
                 contents.split(grunt.util.linefeed).forEach(checkLine);
 
                 // strip from file text that is matched (if so) to every regexp
-                regexps.forEach(function(pattern) {
+                regexps.forEach(function (pattern) {
                     replacement = replacement.replace(pattern, '');
                 });
 

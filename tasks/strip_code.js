@@ -1,8 +1,8 @@
 /*
  * grunt-strip-code
- * https://github.com/philip/grunt-strip-code
+ * https://github.com/nuzzio/grunt-strip-code
  *
- * Copyright (c) 2013 Philip Walton
+ * Copyright (c) 2015 Rene Cabral
  * Licensed under the MIT license.
  */
 

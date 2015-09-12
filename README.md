@@ -130,10 +130,12 @@ The normal behavior is to strip out code in the source files and then save those
 grunt.initConfig({
   strip_code: {
     options: { },
-    files: [
-      {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
-      {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'},
-    ],
+    target: {
+      files: [
+        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
+        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'}
+      ]
+    }
   },
 })
 ```

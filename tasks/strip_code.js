@@ -34,7 +34,8 @@ module.exports = function (grunt) {
             "source.file.not.found": "Source file `%1` not found.",
             "translate.param.missing": "translate() function must have at least a string key parameter.",
             "striped.file.saved.file": "Stripped code from file: `%1`, and saved it to: `%2`.",
-            "nothing.striped.file.saved.file": "No code was stripped from file: `%1`,it was saved to: `%2`."
+            "nothing.striped.file.saved.file": "No code was stripped from file: `%1`,it was saved to: `%2`.",
+            "string.key.missing": "String key not found"
         };
         var errors = [];
 
@@ -155,6 +156,10 @@ module.exports = function (grunt) {
             }
 
             var key = arguments[0];
+
+            if(!(key in strings[options.locale])) {
+                grunt.warn(strings[options.locale]['string.key.missing'] + ': ' + key);
+            }
 
             var string = strings[options.locale][key];
 

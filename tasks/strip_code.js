@@ -12,9 +12,9 @@ var escapeStringRegexp = require('escape-string-regexp');
 var last = require('array-last');
 
 module.exports = function (grunt) {
-    var taskDescr = 'Strip code matching a specified pattern.';
+    var taskDescription = 'Strip code matching a specified pattern.';
 
-    grunt.registerMultiTask('strip_code', taskDescr, function (target) {
+    grunt.registerMultiTask('strip_code', taskDescription, function (target) {
         var blocks = [];
         var regexps = null;
         var patterns = [];
@@ -201,7 +201,9 @@ module.exports = function (grunt) {
             var checkBlocksParity = function (blockDef, blockIdx) {
                 var block = blockStats[blockIdx];
 
-                // 'if' for start block check
+                /**
+                 * 'if' for start block check
+                 */
                 if (blockDef.start.test(line) === true) {
                     if (block.startCount > block.endCount) {
                         generateMessage({
@@ -215,7 +217,10 @@ module.exports = function (grunt) {
                     block.startCount++;
                 }
 
-                // 'if' for end block check
+
+                /**
+                 * 'if' for end block check
+                 */
                 if (blockDef.end.test(line) === true) {
                     if (block.endCount >= block.startCount) {
                         generateMessage({
@@ -272,49 +277,59 @@ module.exports = function (grunt) {
             f.src.forEach(function (filepath) {
                 var message = null;
 
-                // warn on invalid source files
                 if (grunt.file.exists(filepath) === false) {
                     message = translate("source.file.not.found", filepath);
                     grunt.log.warn(message);
                     return;
                 }
 
-                // get file content and its destination
                 var contents = grunt.file.read(filepath);
                 var destination = f.dest || filepath;
                 var replacement = contents;
                 currentFile = filepath;
 
-                // create an structure that will hold stats while each file
-                // is being checked
+
+                /**
+                 * Creates a structure that will hold the properties of each file
+                 * while it is being checked.
+                 */
                 blockStats = blocks.map(function () {
                     return {
                         startCount: 0,
                         endCount: 0,
-
                         lastStartLine: null,
                         lastEndLine: null
                     };
                 });
 
-                // check every line of the file with main 'check' function
+                /**
+                 * Process every line of the current file with main 'check' function
+                 */
                 contents.split(grunt.util.linefeed).forEach(checkLine);
 
-                // strip from file text that is matched (if so) to every regexp
+                /**
+                 * Strip block match from file
+                 */
                 regexps.forEach(function (pattern) {
                     replacement = replacement.replace(pattern, '');
                 });
 
-                // compose summary message depending on strip results
                 if (contents !== replacement) {
                     message = translate('striped.file.saved.file', filepath, destination);
                 } else {
                     message = translate('nothing.striped.file.saved.file', filepath, destination);
                 }
 
-                // print log message and write result to destination
+                /**
+                 * Write file to its destination.
+                 */
                 grunt.file.write(destination, replacement);
+
+                /**
+                 * Log file strip status and write destination.
+                 */
                 grunt.log.writeln(message);
+
             });
         });
 

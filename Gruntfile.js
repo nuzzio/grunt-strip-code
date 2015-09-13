@@ -10,8 +10,14 @@
 
 module.exports = function (grunt) {
 
-    // Project configuration.
     grunt.initConfig({
+
+        paths: {
+            fixtures: 'test/fixtures/',
+            expected: 'test/expected/',
+            tmp: 'test/tmp/'
+        },
+
         jshint: {
             all: [
                 'Gruntfile.js',
@@ -23,40 +29,59 @@ module.exports = function (grunt) {
             }
         },
 
-        // Before generating any new files, remove any previously-created files.
+        /**
+         * Clear old tests
+         */
         clean: {
-            tests: 'tmp'
+            tests: 'test/tmp'
         },
 
-        // Before running strip_code, copy the files to the tmp directory
+        /**
+         * Copy test fixtures to the tmp directory
+         */
+
         copy: {
             tests: {
                 files: [
-                    {expand: true, cwd: 'test/fixtures/', src: '*', dest: 'tmp/'}
+                    {
+                        expand: true,
+                        cwd: '<%= paths.fixtures %>',
+                        src: '*',
+                        dest: '<%= paths.tmp %>'
+                    }
                 ]
             }
         },
 
-        // Configuration to be run (and then tested).
+        /**
+         * Run task on test files.
+         * Testing will be done on these files.
+         */
         strip_code: {
+
             default_options: {
-                src: 'tmp/default_options.js'
+                src: 'test/tmp/default_options.js'
             },
+            
             test_html: {
-                src: 'tmp/*.html',
+                src: 'test/tmp/*.html',
                 options: {
-                    interceptionCheck: true,
+                    intersectionCheck: true,
                     blocks: [
                         {
                             start_block: '<!--#BEGIN DEBUG#-->',
                             end_block: '<!--#END DEBUG#-->'
+                        },
+                        {
+                            start_block: '/* BEGIN DEBUG */',
+                            end_block: '/* END DEBUG */'
                         }
                     ]
                 }
             },
             start_end_options: {
                 options: {
-                    interceptionCheck: true,
+                    intersectionCheck: true,
                     blocks: [
                         {
                             start_block: '/* {test} */',
@@ -68,48 +93,63 @@ module.exports = function (grunt) {
                         }
                     ]
                 },
-                src: 'tmp/start_end_options.js'
+                src: 'test/tmp/start_end_options.js'
             },
             pattern_options: {
                 options: {
                     patterns: / *console\.log\([\w\S ]+\)\n?/g
                 },
-                src: 'tmp/pattern_options.js'
+                src: 'test/tmp/pattern_options.js'
             },
             dest_specified: {
                 options: {
                     parityCheck: true
                 },
                 files: [
-                    {src: 'tmp/dest_specified.js', dest: 'tmp/dest_specified2.js'}
+                    {src: 'test/tmp/dest_specified.js', dest: 'test/tmp/dest_specified2.js'}
                 ]
             },
             multiple_files: {
-                src: ['tmp/multiple_files*.js', 'tmp/another_multiple_file.js']
+                src: ['test/tmp/multiple_files*.js', 'test/tmp/another_multiple_file.js']
             }
         },
 
-        // Unit tests.
+        /**
+         * Run tests
+         */
         nodeunit: {
-            tests: ['test/*_test.js']
+            all: ['test/*_test.js'],
+            options: {
+                reporter: 'verbose'
+            }
         }
 
     });
 
-    // Actually load this plugin's task(s).
+    /**
+     * Load this plugin's task(s).
+     */
     grunt.loadTasks('tasks');
 
-    // These plugins provide necessary tasks.
+    /**
+     * Load plugins.
+     */
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-    // plugin's task(s), then test the result.
+    /**
+     * - first clean the "tmp" dir
+     * - then run this plugin's task(s)
+     * - then test the result
+     */
     grunt.registerTask('test', ['clean', 'copy', 'strip_code', 'nodeunit']);
 
-    // By default, lint and run all tests.
+    /**
+     * - lint
+     * - run all tests
+     */
     grunt.registerTask('default', ['jshint', 'test']);
 
 };

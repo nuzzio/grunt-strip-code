@@ -5,6 +5,7 @@ function baz() { }
 /* end-test-code */
 
 
+
 function(a, b, c) {
   // do something
 }

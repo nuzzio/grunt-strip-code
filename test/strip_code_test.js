@@ -78,4 +78,13 @@ exports.strip_code = {
 
     test.done();
   },
+  custom_identifier: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/custom_identifier.js');
+    var expected = grunt.file.read('test/expected/custom_identifier.js');
+    test.equal(actual, expected, 'should use new custom identifiers');
+
+    test.done();
+  }
 };

@@ -122,6 +122,22 @@ grunt.initConfig({
 })
 ```
 
+#### Using a custom identifier
+
+Functionally similar to using your own pattern, but abstracts away a regular expression. The following will remove blocks starting with `// debug_start` and ending with `// debug_end` from all the `.js` files in the `dist/` folder.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      custom_start_identifier: '// debug_start',
+      custom_end_identifier: '// debug_end'
+    },
+    src: 'dist/*.js'
+  }
+});
+```
+
 #### Specifying source and destination.
 
 The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.

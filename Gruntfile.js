@@ -63,6 +63,13 @@ module.exports = function(grunt) {
       multiple_files: {
         src: ['tmp/multiple_files*.js', 'tmp/another_multiple_file.js']
       },
+      custom_identifier: {
+        options: {
+          custom_start_identifier: '// debug_start',
+          custom_end_identifier: '// debug_end'
+        },
+        src: 'tmp/custom_identifier.js'
+      }
     },
 
     // Unit tests.

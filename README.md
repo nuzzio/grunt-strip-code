@@ -16,7 +16,7 @@ A use-case for this practice is to make private JavaScript functions accessible 
 ## Builds
 
 | Branch  | Status  |
-| :------------ |:---------------:|
+| :------------ |:--------------- |
 | master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) |
 | develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) |
 

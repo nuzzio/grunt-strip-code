@@ -4,10 +4,27 @@
     <meta charset="utf-8"/>
     <title>Basic HTML Sample Page</title>
 </head>
+<script>
+
+    function hello() {
+        return "Hello World";
+    }
+
+    console.log(hello());
+
+    /* BEGIN DEBUG */
+    function traceBug() {
+        return "Bug found";
+    }
+
+    console.log(traceBug());
+    /* END DEBUG */
+</script>
+
 <body>
 
 <!--#BEGIN DEBUG#-->
-<h1>This an alternative headline</h1>
+<h1>This a debug headline</h1>
 <!--#END DEBUG#-->
 
 <h1>A Simple Sample Web Page</h1>
@@ -25,4 +42,5 @@
 <h6>This is a size "6" heading</h6>
 
 </body>
+
 </html>

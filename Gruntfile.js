@@ -42,6 +42,18 @@ module.exports = function (grunt) {
             default_options: {
                 src: 'tmp/default_options.js'
             },
+            test_html: {
+                src: 'tmp/*.html',
+                options: {
+                    interceptionCheck: true,
+                    blocks: [
+                        {
+                            start_block: '<!--#BEGIN DEBUG#-->',
+                            end_block: '<!--#END DEBUG#-->'
+                        }
+                    ]
+                }
+            },
             start_end_options: {
                 options: {
                     interceptionCheck: true,

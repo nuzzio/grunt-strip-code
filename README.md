@@ -1,6 +1,5 @@
 # grunt-strip-code
 
-[![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=feature%2Fcustom-tags)](https://travis-ci.org/nuzzio/grunt-strip-code)
 
 The grunt-strip-code plugin is used to remove sections of code from production builds that are only needed in development and test environments. grunt-strip-code uses start and end comments to identify the code sections to strip out. For example:
 
@@ -13,6 +12,16 @@ doNotRemoveMe();
 ```
 
 A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
+
+
+## Build Status
+
+master: [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code)
+
+development: [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=development)](https://travis-ci.org/nuzzio/grunt-strip-code)
+
+
+
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`

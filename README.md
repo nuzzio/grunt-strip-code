@@ -14,12 +14,10 @@ doNotRemoveMe();
 A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
 
 
-## Build Status
-
-master: [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code)
-
-development: [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=development)](https://travis-ci.org/nuzzio/grunt-strip-code)
-
+| Branch  | Status  |
+| :------------ |:---------------:|
+| master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| development   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=development)](https://travis-ci.org/nuzzio/grunt-strip-code) |
 
 
 

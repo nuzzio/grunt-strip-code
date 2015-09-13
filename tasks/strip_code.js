@@ -24,10 +24,10 @@ module.exports = function (grunt) {
         var strings = {};
 
         strings.en_us = {
-            "missing.end.block": "Missing end block: in file `%f` at line %n for start block `%p`.",
-            "missing.start.block": "Missing start block: in file `%f` at line %n for end block `%p`.",
-            "extra.start.block": "Extra start block: In file `%f` at line %n end block `%p` is closed. " +
-            "However before it there is another start block.",
+            "missing.end.block": "Missing end block: in file `%f` for start block `%p` at line %n.",
+            "missing.start.block": "Missing start block: in file `%f` for end block `%p` at line %n.",
+            "extra.start.block": "Extra start block: `%x` in file `%f` at line %n, before required end block:" +
+            " `%p` at line `%y`.",
             "skipped.invalid.pattern": "Skipped invalid pattern.",
             "skipped.invalid.blocks": "Skipped invalid pair of start/end blocks.",
             "no.blocks.or.patterns": "No blocks or patterns have been specified.",
@@ -47,7 +47,7 @@ module.exports = function (grunt) {
 
         var options = this.options({
             intersectionCheck: false,
-            parityCheck: false,
+            parityCheck: true,
             locale: 'en_us',
             patterns: [],
             blocks: [{
@@ -178,9 +178,13 @@ module.exports = function (grunt) {
          */
         var generateMessage = function (params) {
 
-            var message = translate(error[params.caseNum - 1])
+            console.log(params.caseNum);
+
+            var message = translate(errors[params.caseNum])
                 .replace('%n', (params.lineNum + 1).toString())
-                .replace('%p', params.pattern.source)
+                .replace('%p', params.pattern)
+                .replace('%x', params.start)
+                .replace('%y', (params.endLineNum + 1).toString())
                 .replace('%f', currentFile);
 
             grunt.warn(message);
@@ -211,15 +215,17 @@ module.exports = function (grunt) {
                  * 'if' for start block check
                  */
                 if (blockDef.start.test(line) === true) {
+
+                    block.lastStartLine = lineNum;
+
                     if (block.startCount > block.endCount) {
                         generateMessage({
-                            pattern: blockDef.start,
+                            pattern: line.trim(),
                             lineNum: block.lastStartLine,
                             caseNum: 1
                         });
                     }
 
-                    block.lastStartLine = lineNum;
                     block.startCount++;
                 }
 
@@ -228,15 +234,17 @@ module.exports = function (grunt) {
                  * 'if' for end block check
                  */
                 if (blockDef.end.test(line) === true) {
+
+                    block.lastEndLine = lineNum;
+
                     if (block.endCount >= block.startCount) {
                         generateMessage({
-                            pattern: blockDef.end,
-                            lineNum: blockDef.lastEndLine,
+                            pattern: line.trim(),
+                            lineNum: block.lastEndLine,
                             caseNum: 2
                         });
                     }
 
-                    block.lastEndLine = lineNum;
                     block.endCount++;
                 }
             };
@@ -251,7 +259,7 @@ module.exports = function (grunt) {
              */
             var checkBlocksIntersection = function (blockDef, blockIdx) {
                 if (blockDef.start.test(line)) {
-                    blocksStack.push([blockIdx, lineNum]);
+                    blocksStack.push([blockIdx, lineNum, line.trim()]);
                 }
 
                 if (blockDef.end.test(line)) {
@@ -259,8 +267,10 @@ module.exports = function (grunt) {
                         blocksStack.pop();
                     } else {
                         generateMessage({
-                            pattern: blockDef.start,
+                            start: last(blocksStack)[2],
+                            pattern: line.trim(),
                             lineNum: last(blocksStack)[1],
+                            endLineNum: lineNum,
                             caseNum: 3
                         });
                     }
@@ -303,11 +313,11 @@ module.exports = function (grunt) {
                     return {
                         startCount: 0,
                         endCount: 0,
-                        lastStartLine: null,
-                        lastEndLine: null
+                        lastStartLine: 0,
+                        lastEndLine: 0
                     };
                 });
-
+                
                 /**
                  * Process every line of the current file with main 'check' function
                  */

@@ -2,12 +2,13 @@ var foo
 
 /* test-code */
 function baz() { }
-/* end-test-code */
 
 /* {test} */
 function bar() { }
 /* {/test} */
 
-function(a, b, c /*{test}*/ , d /*{/test}*/) {
+// call a func that does something
+/* end-test-code */
+function(a, b, c /* {test} */ , d /* {/test} */) {
   // do something
 }

@@ -1,5 +1,6 @@
 # grunt-strip-code
 
+
 The grunt-strip-code plugin is used to remove sections of code from production builds that are only needed in development and test environments. grunt-strip-code uses start and end comments to identify the code sections to strip out. For example:
 
 ```js
@@ -11,6 +12,14 @@ doNotRemoveMe();
 ```
 
 A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
+
+## Builds
+
+| Branch  | Status  |
+| :------------ |:---------------:|
+| master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| development   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=development)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
@@ -64,21 +73,33 @@ The `blocks` array contains one or more objects which define the boundaries of t
 
 #### options.blocks.start_block
 Type: `String`
-Default value: `/** test-code **/`
+Default value: `/* test-code */`
 
 The text of the opening comment used to identify code to strip.
 
 #### options.blocks.end_block
 Type: `String`
-Default value: `/** end-test-code **/`
+Default value: `/* end-test-code */`
 
 The text of the closing comment used to identify code to strip.
 
-#### options.pattern
-Type: `RegExp`
-Default value: (a generated RegExp matching the start and end comments)
+#### options.patterns
+Type: `array`
+Default value: `[]`
 
-If the default start and end comment matching doesn't work for you needs, you can supply your own RegExp to match against. If the `pattern` option is specified, `options.blocks` are ignored.
+You can also supply your own RegExps to match against.
+
+#### options.parityCheck
+Type: `boolean`
+Default value: `false`
+
+Turns on check that makes sure if you blocks have same amount of start/end pairs in your code.
+
+#### options.intersectionCheck
+Type: `boolean`
+Default value: `false`
+
+Turns on check that makes sure if you blocks does not intersect between each other.
 
 ### Usage Examples
 

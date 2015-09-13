@@ -36,6 +36,16 @@ exports.strip_code = {
         // setup here if necessary
         done();
     },
+    default_options: function (test) {
+        test.expect(1);
+
+        var file = 'default_options.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(actual, expected, 'should default to using "test-code" and "end-test-code" as the identifiers.');
+
+        test.done();
+    },
     strip_html_and_js_code: function (test) {
         test.expect(1);
         var file = 'sample.html';
@@ -46,16 +56,6 @@ exports.strip_code = {
             expected,
             'should strip HTML debug code and JS debug code using specified blocks array'
         );
-
-        test.done();
-    },
-    default_options: function (test) {
-        test.expect(1);
-
-        var file = 'default_options.js';
-        var actual = helper.tmpReader(file);
-        var expected = helper.expectedReader(file);
-        test.equal(actual, expected, 'should default to using "test-code" and "end-test-code" as the identifiers.');
 
         test.done();
     },

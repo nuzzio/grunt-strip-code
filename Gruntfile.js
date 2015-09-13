@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                         {
                             start_block: '/* test-code */',
                             end_block: '/* end-test-code */'
-                        },
+                        }
                     ]
                 },
                 src: 'tmp/start_end_options.js'

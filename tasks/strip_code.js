@@ -37,6 +37,7 @@ module.exports = function (grunt) {
             "nothing.striped.file.saved.file": "No code was stripped from file: `%1`,it was saved to: `%2`.",
             "string.key.missing": "String key not found"
         };
+
         var errors = [];
 
         errors[1] = "missing.end.block";

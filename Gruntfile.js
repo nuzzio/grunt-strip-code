@@ -66,7 +66,6 @@ module.exports = function (grunt) {
             strip_html_and_js_code: {
                 src: 'test/tmp/sample.html',
                 options: {
-                    intersectionCheck: true,
                     blocks: [
                         {
                             start_block: '<!--#BEGIN DEBUG#-->',
@@ -81,7 +80,6 @@ module.exports = function (grunt) {
             },
             start_end_options: {
                 options: {
-                    intersectionCheck: true,
                     blocks: [
                         {
                             start_block: '/* {test} */',
@@ -102,9 +100,6 @@ module.exports = function (grunt) {
                 src: 'test/tmp/pattern_options.js'
             },
             dest_specified: {
-                options: {
-                    parityCheck: true
-                },
                 files: [
                     {src: 'test/tmp/dest_specified.js', dest: 'test/tmp/dest_specified2.js'}
                 ]

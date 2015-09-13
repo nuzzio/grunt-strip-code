@@ -46,7 +46,7 @@ module.exports = function (grunt) {
 
 
         var options = this.options({
-            intersectionCheck: false,
+            intersectionCheck: true,
             parityCheck: true,
             locale: 'en_us',
             patterns: [],

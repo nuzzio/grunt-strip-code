@@ -1,5 +1,7 @@
 # grunt-strip-code
 
+[![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=feature%2Fcustom-tags)](https://travis-ci.org/nuzzio/grunt-strip-code)
+
 The grunt-strip-code plugin is used to remove sections of code from production builds that are only needed in development and test environments. grunt-strip-code uses start and end comments to identify the code sections to strip out. For example:
 
 ```js

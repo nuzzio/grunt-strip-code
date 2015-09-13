@@ -42,7 +42,11 @@ exports.strip_code = {
         var file = 'default_options.js';
         var actual = helper.tmpReader(file);
         var expected = helper.expectedReader(file);
-        test.equal(actual, expected, 'should default to using "test-code" and "end-test-code" as the identifiers.');
+        test.equal(
+            actual,
+            expected,
+            'should default to using "/* test-code */" and "/* end-test-code */" as the block delimeters.'
+        );
 
         test.done();
     },

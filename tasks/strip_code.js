@@ -317,7 +317,7 @@ module.exports = function (grunt) {
                         lastEndLine: 0
                     };
                 });
-                
+
                 /**
                  * Process every line of the current file with main 'check' function
                  */

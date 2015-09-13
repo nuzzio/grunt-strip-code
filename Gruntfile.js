@@ -63,8 +63,8 @@ module.exports = function (grunt) {
                 src: 'test/tmp/default_options.js'
             },
 
-            test_html: {
-                src: 'test/tmp/*.html',
+            strip_html_and_js_code: {
+                src: 'test/tmp/sample.html',
                 options: {
                     intersectionCheck: true,
                     blocks: [

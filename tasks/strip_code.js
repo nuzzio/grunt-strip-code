@@ -17,16 +17,30 @@ module.exports = function(grunt) {
 
     var options = this.options({
           start_comment: "test-code",
-          end_comment: "end-test-code"
-        })
-      , pattern = options.pattern || new RegExp(
-            "[\\t ]*\\/\\* ?"
-          + options.start_comment
-          + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
-          + options.end_comment
-          + " ?\\*\\/[\\t ]*\\n?"
-          , "g"
-        );
+          end_comment: "end-test-code",
+          tag:"debug"
+        });
+
+    var pattern = [];
+
+    pattern[0] = options.pattern || new RegExp(
+        "[\\t ]*\\/\\* ?"
+        + options.start_comment
+        + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
+        + options.end_comment
+        + " ?\\*\\/[\\t ]*\\n?"
+        , "g"
+      );
+
+    pattern[1] = new RegExp(
+        "[\\s]+?\\/(\\/|\\s)+?<"
+        + options.tag
+        + ">((.|\\s)+?)\\/(\\/|\\s)+?<\/"
+        + options.tag
+        + ">"
+        , "g"
+      );
+
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
@@ -36,10 +50,19 @@ module.exports = function(grunt) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return;
         }
-        var contents = grunt.file.read(filepath)
-          , replacement = contents.replace(pattern, "");
+
+        var contents = grunt.file.read(filepath);
+        var replacement = "";
+
+        if (options.pattern) {
+          replacement = contents.replace(pattern[0], "");
+        } else {
+          replacement = contents.replace (pattern[0], "");
+          replacement = replacement.replace (pattern[1], "");
+        }
+
         // if replacement is different than contents, save file and print a success message.
-        if (contents != replacement) {
+        if (contents !== replacement) {
           if (f.dest) {
             grunt.file.write(f.dest, replacement);
             grunt.log.writeln("Stripped code from " + filepath + " and saved to " + f.dest);

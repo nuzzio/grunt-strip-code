@@ -8,47 +8,241 @@
 
 'use strict';
 
+var escapeStringRegexp = require('escape-string-regexp');
+var last = require('array-last');
+
 module.exports = function(grunt) {
+    var taskDescr = 'Strip code matching a specified pattern.';
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+    grunt.registerMultiTask('strip_code', taskDescr, function(target) {
+        var blocks = [];
+        var regexps = null;
+        var patterns = [];
+        var blockStats = [];
+        var blocksStack = [];
+        var currentFile = null;
 
-  grunt.registerMultiTask("strip_code", "Strip code matching a specified patterna.", function(target) {
+        var options = this.options({
+            intersectionCheck: false,
+            parityCheck: false,
 
-    var options = this.options({
-          start_comment: "test-code",
-          end_comment: "end-test-code"
-        })
-      , pattern = options.pattern || new RegExp(
-            "[\\t ]*\\/\\* ?"
-          + options.start_comment
-          + " ?\\*\\/[\\s\\S]*?\\/\\* ?"
-          + options.end_comment
-          + " ?\\*\\/[\\t ]*\\n?"
-          , "g"
+            patterns: [],
+            blocks: [{
+                start_block: '/* test-code */',
+                end_block:   '/* end-test-code */'
+            }]
+        });
+
+        // process passed 'blocks' options
+        if (options.blocks && options.blocks.constructor === Object) {
+            blocks = [options.blocks];
+        } else if (Array.isArray(options.blocks)) {
+            blocks = options.blocks;
+        }
+
+        // filter blocks
+        blocks = blocks.filter(function(raw_blocks) {
+            var isBlocksValid = typeof raw_blocks.start_block === 'string' &&
+                raw_blocks.start_block && raw_blocks.end_block &&
+                (raw_blocks.start_block !== raw_blocks.end_block);
+
+            if (isBlocksValid === false) {
+                grunt.log.warn('Skipped invalid pair of start/end block',
+                    raw_blocks);
+            }
+
+            return isBlocksValid;
+        });
+
+        // process passed 'patterns' options
+        if (Array.isArray(options.patterns)) {
+            patterns = options.patterns;
+        } else if (options.patterns instanceof RegExp) {
+            patterns = [options.patterns];
+        }
+
+        // filter patterns
+        patterns = patterns.filter(function(pattern) {
+            var isPatternValid = pattern && pattern instanceof RegExp;
+
+            if (isPatternValid === false) {
+                grunt.log.warn('Skipped invalid pattern', pattern);
+            }
+
+            return isPatternValid;
+        });
+
+        // quit if we do not have nether blocks nor patterns
+        if (blocks.length === 0 && patterns.length === 0) {
+            grunt.warn('Do not find any kind of patterns');
+        }
+
+        // convert block pairs into regexps
+        blocks = blocks.map(function (raw_blocks) {
+            var regexpStr = [
+                '[\\t ]*',
+                escapeStringRegexp(raw_blocks.start_block),
+                '[\\s\\S]*?',
+                escapeStringRegexp(raw_blocks.end_block),
+                '[\\t ]*',
+                escapeStringRegexp(grunt.util.linefeed) + '?',
+            ];
+
+            return {
+                block: new RegExp(regexpStr.join(''), 'g'),
+                start: new RegExp(regexpStr[1]),
+                end:   new RegExp(regexpStr[3])
+            };
+        });
+
+        // concat all regexps into single array
+        regexps = [].concat(
+            patterns, blocks.map(function(item) { return item.block; })
         );
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      f.src.forEach(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return;
-        }
-        var contents = grunt.file.read(filepath)
-          , replacement = contents.replace(pattern, "");
-        // if replacement is different than contents, save file and print a success message.
-        if (contents != replacement) {
-          if (f.dest) {
-            grunt.file.write(f.dest, replacement);
-            grunt.log.writeln("Stripped code from " + filepath + " and saved to " + f.dest);
-          } else {
-            grunt.file.write(filepath, replacement);
-            grunt.log.writeln("Stripped code from " + filepath);
-          }
-        }
-      });
+
+        // function that prints error message and quits
+        var makeWarn = function(params) {
+            var messages = [
+                'In file `%f` at line %n start block `%p` does not have' +
+                    ' its end block pair',
+                'In file `%f` at line %n end block `%p` does not have' +
+                    ' its start block pair',
+                'In file `%f` at line %n end block `%p` is closed. However' +
+                    ' before it there is another start block'
+            ];
+
+            var message = messages[params.caseNum - 1]
+                .replace('%n', (params.lineNum + 1).toString())
+                .replace('%p', params.pattern.source)
+                .replace('%f', currentFile);
+
+            grunt.warn(message);
+        };
+
+        // function that is being called to check each line of the file
+        // holds 3 subfunctions that does specific checks
+        var checkLine = function(line, lineNum) {
+            if (line.trim() === '') {
+                return;
+            }
+
+            // function that checks if amount of start/end blocks
+            // are equal.
+            var checkBlocksParity = function(blockDef, blockIdx) {
+                var block = blockStats[blockIdx];
+
+                // 'if' for start block check
+                if (blockDef.start.test(line) === true) {
+                    if (block.startCount > block.endCount) {
+                        makeWarn({
+                            pattern: blockDef.start,
+                            lineNum: block.lastStartLine,
+                            caseNum: 1
+                        });
+                    }
+
+                    block.lastStartLine = lineNum;
+                    block.startCount++;
+                }
+
+                // 'if' for end block check
+                if (blockDef.end.test(line) === true) {
+                    if (block.endCount >= block.startCount) {
+                        makeWarn({
+                            pattern: blockDef.end,
+                            lineNum: blockDef.lastEndLine,
+                            caseNum: 2
+                        });
+                    }
+
+                    block.lastEndLine = lineNum;
+                    block.endCount++;
+                }
+            };
+
+            // function that checks if any two (or more) pairs of start/end
+            // blocks are intersection.
+            var checkBlocksIntersection = function(blockDef, blockIdx) {
+                if (blockDef.start.test(line)) {
+                    blocksStack.push([blockIdx, lineNum]);
+                }
+
+                if (blockDef.end.test(line)) {
+                    if (last(blocksStack)[0] === blockIdx) {
+                        blocksStack.pop();
+                    } else {
+                        makeWarn({
+                            pattern: blockDef.start,
+                            lineNum: last(blocksStack)[1],
+                            caseNum: 3
+                        });
+                    }
+                }
+            };
+
+            // if user needs parity check, do it
+            if (options.parityCheck === true) {
+                blocks.forEach(checkBlocksParity);
+            }
+
+            // if user needs check for intersection, do it
+            if (options.intersectionCheck === true) {
+                blocks.forEach(checkBlocksIntersection);
+            }
+        };
+
+        // iterate over all specified file groups.
+        this.files.forEach(function (f) {
+            f.src.forEach(function (filepath) {
+                var message = null;
+
+                // warn on invalid source files
+                if (grunt.file.exists(filepath) === false) {
+                    message = 'Source file "' + filepath + '" not found.';
+                    grunt.log.warn(message);
+                    return;
+                }
+
+                // get file content and its destination
+                var contents = grunt.file.read(filepath);
+                var destination = f.dest || filepath;
+                var replacement = contents;
+                currentFile = filepath;
+
+                // create an structure that will hold stats while each file
+                // is being checked
+                blockStats = blocks.map(function() {
+                    return {
+                        startCount: 0,
+                        endCount:   0,
+
+                        lastStartLine: null,
+                        lastEndLine: null,
+                    };
+                });
+
+                // check every line of the file with main 'check' function
+                contents.split(grunt.util.linefeed).forEach(checkLine);
+
+                // strip from file text that is matched (if so) to every regexp
+                regexps.forEach(function(pattern) {
+                    replacement = replacement.replace(pattern, '');
+                });
+
+                // compose summary message depending on strip results
+                if (contents !== replacement) {
+                    message = 'Stripped code from "' + filepath +
+                        '" and saved to "' + destination + '"';
+                } else {
+                    message = 'Nothing has been stripped from "' +
+                        filepath + '", saved to "' + destination + '"';
+                }
+
+                // print log message and write result to destination
+                grunt.file.write(destination, replacement);
+                grunt.log.writeln(message);
+            });
+        });
     });
-  });
 };
+

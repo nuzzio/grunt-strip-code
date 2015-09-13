@@ -44,18 +44,30 @@ module.exports = function(grunt) {
       },
       start_end_options: {
         options: {
-          start_comment: '{test}',
-          end_comment: '{/test}',
+          interceptionCheck: true,
+          blocks: [
+            {
+              start_block: '/* {test} */',
+              end_block: '/* {/test} */',
+            },
+            {
+              start_block: '/* test-code */',
+              end_block: '/* end-test-code */',
+            },
+          ]
         },
         src: 'tmp/start_end_options.js',
       },
       pattern_options: {
         options: {
-          pattern: / *console\.log\(['"a-z]+\)\n?/g
+          patterns: / *console\.log\(['"a-z]+\)\n?/g
         },
         src: 'tmp/pattern_options.js',
       },
       dest_specified: {
+        options: {
+          parityCheck: true,
+        },
         files: [
           {src: 'tmp/dest_specified.js', dest: 'tmp/dest_specified2.js'},
         ]

@@ -1,5 +1,5 @@
 /* test-code */
-"STFU!";
+"Bad Language";
 /* end-test-code */
 
-"OMG!";
+"Good Language";

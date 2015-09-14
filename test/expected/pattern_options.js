@@ -1,3 +1,3 @@
-function() {
-  doSomething()
+function free () {
+  doSomething();
 }

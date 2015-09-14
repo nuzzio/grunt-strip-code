@@ -1,5 +1,5 @@
-function() {
-  console.log("foo")
-  doSomething()
-  console.log("bar")
+function free () {
+  console.log("foo");
+  doSomething();
+  console.log("bar");
 }

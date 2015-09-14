@@ -21,6 +21,8 @@ module.exports = function (grunt) {
         var blockStats = [];
         var blocksStack = [];
         var currentFile = null;
+        var fileStartDelimiters = [];
+        var fileEndDelimiters = [];
         var strings = {};
 
         strings.en_us = {
@@ -195,7 +197,7 @@ module.exports = function (grunt) {
 
         /**
          * Checks each line of the file.
-         * Two (2) sub-functions check intersection and parity.
+         * Sub-functions check intersection and parity.
          * @param line
          * @param lineNum
          */
@@ -203,6 +205,24 @@ module.exports = function (grunt) {
             if (line.trim() === '') {
                 return;
             }
+
+
+            function logAnyDelimiterType (line) {
+                blocks.forEach(function (blockDef, blockIdx) {
+                    if (blockDef.start.test(line) === true) {
+                        fileStartDelimiters.push([blockIdx, lineNum, line.trim()]);
+                    }
+                    if (blockDef.end.test(line) === true) {
+                        fileEndDelimiters.push([blockIdx, lineNum, line.trim()]);
+                    }
+                });
+            }
+
+            logAnyDelimiterType(line);
+
+
+            var startCount = fileStartDelimiters.length;
+            var endCount = fileEndDelimiters.length;
 
             /**
              * Checks that amount of start/end blocks are equal.
@@ -264,7 +284,7 @@ module.exports = function (grunt) {
                     blocksStack.push([blockIdx, lineNum, line.trim()]);
                 }
 
-                if (blockDef.end.test(line)) {
+                if (blockDef.end.test(line) && typeof last(blocksStack) !== "undefined") {
                     if (last(blocksStack)[0] === blockIdx) {
                         blocksStack.pop();
                     } else {
@@ -276,6 +296,14 @@ module.exports = function (grunt) {
                             caseNum: 3
                         });
                     }
+                } else if (startCount - endCount > 1){
+                    generateMessage({
+                        start: last(blocksStack)[2],
+                        pattern: line.trim(),
+                        lineNum: last(blocksStack)[1],
+                        endLineNum: lineNum,
+                        caseNum: 3
+                    });
                 }
             };
 
@@ -294,6 +322,8 @@ module.exports = function (grunt) {
         this.files.forEach(function (f) {
             f.src.forEach(function (filepath) {
                 var message = null;
+                fileStartDelimiters = [];
+                fileEndDelimiters = [];
 
                 if (grunt.file.exists(filepath) === false) {
                     message = translate("source.file.not.found", filepath);

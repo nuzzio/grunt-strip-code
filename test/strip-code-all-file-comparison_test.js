@@ -72,7 +72,7 @@ exports.strip_code = {
         test.equal(
             actual,
             expected,
-            'should use the specified start and end comment identifiers.'
+            'should use the specified start and end block delimiters.'
         );
 
         test.done();
@@ -131,6 +131,34 @@ exports.strip_code = {
             actual3,
             expected3,
             'should handle multiple files.'
+        );
+
+        test.done();
+    },
+    intersection_false: function (test) {
+        test.expect(1);
+
+        var file = 'intersection-false.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(
+            actual,
+            expected,
+            'should fail to clean file properly.'
+        );
+
+        test.done();
+    },
+    parity_false: function (test) {
+        test.expect(1);
+
+        var file = 'parity-false.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(
+            actual,
+            expected,
+            'should fail to clean file properly.'
         );
 
         test.done();

@@ -2,9 +2,6 @@
 
   var foo;
 
-  /* test-code */
-  function two() { }
-  /* end-test-code */
 
   return {
     bar: "bar"

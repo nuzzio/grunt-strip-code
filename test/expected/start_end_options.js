@@ -1,5 +1,8 @@
-var foo
+var foo;
 
-function(a, b, c) {
+function baz() { }
+
+
+function free(a, b, c) {
   // do something
 }

@@ -98,7 +98,7 @@ module.exports = function (grunt) {
             },
             pattern_options: {
                 options: {
-                    patterns: / *console\.log\([\w\S ]+\)\n?/g
+                    patterns: / *console\.log\([\w\S ]+\);?\n?/g
                 },
                 src: 'test/tmp/pattern_options.js'
             },
@@ -132,9 +132,6 @@ module.exports = function (grunt) {
                 src: 'test/tmp/intersection-false.js'
             },
             parity_false: {
-                options: {
-                    parityCheck: false
-                },
                 src: 'test/tmp/parity-false.js'
             }
         },

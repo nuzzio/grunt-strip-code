@@ -55,9 +55,12 @@ module.exports = function (grunt) {
 
         /**
          * Run task on test files.
-         * Testing will be done on these files.
          */
         strip_code: {
+
+            options: {
+                testMode: true
+            },
 
             default_options: {
                 src: 'test/tmp/default_options.js'

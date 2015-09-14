@@ -46,6 +46,7 @@ module.exports = function (grunt) {
 
 
         var options = this.options({
+            testMode: false,
             intersectionCheck: true,
             parityCheck: true,
             locale: 'en_us',
@@ -178,16 +179,17 @@ module.exports = function (grunt) {
          */
         var generateMessage = function (params) {
 
-            console.log(params.caseNum);
-
             var message = translate(errors[params.caseNum])
                 .replace('%n', (params.lineNum + 1).toString())
                 .replace('%p', params.pattern)
                 .replace('%x', params.start)
                 .replace('%y', (params.endLineNum + 1).toString())
                 .replace('%f', currentFile);
-
-            grunt.warn(message);
+            if(options.testMode === true ){
+                grunt.log.writeln(message);
+            } else {
+                grunt.warn(message);
+            }
         };
 
 

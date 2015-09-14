@@ -101,11 +101,38 @@ module.exports = function (grunt) {
             },
             dest_specified: {
                 files: [
-                    {src: 'test/tmp/dest_specified.js', dest: 'test/tmp/dest_specified2.js'}
+                    {
+                        src: 'test/tmp/dest_specified.js',
+                        dest: 'test/tmp/dest_specified2.js'
+                    }
                 ]
             },
             multiple_files: {
-                src: ['test/tmp/multiple_files*.js', 'test/tmp/another_multiple_file.js']
+                src: [
+                    'test/tmp/multiple_files*.js',
+                    'test/tmp/another_multiple_file.js'
+                ]
+            },
+            intersection_false: {
+                options: {
+                    blocks: [
+                        {
+                            start_block: '/* {test} */',
+                            end_block: '/* {/test} */'
+                        },
+                        {
+                            start_block: '/* test-code */',
+                            end_block: '/* end-test-code */'
+                        }
+                    ]
+                },
+                src: 'test/tmp/intersection-false.js'
+            },
+            parity_false: {
+                options: {
+                    parityCheck: false
+                },
+                src: 'test/tmp/parity-false.js'
             }
         },
 

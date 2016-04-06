@@ -1,14 +1,12 @@
-var foo;
+function foo() {
+    console.log("foo");
+    doSomething();
+    console.log("bar");
+}
 
-function baz() { }
-
-/* {test} */
-function bar() { }
-/* {/test} */
-
-/* test-code */
+/* start-test-block */
 // call a func that does something
-/* end-test-code */
-function free(a, b, c /* {test} */ , d /* {/test} */) {
+/* end-test-block */
+function free(a, b, c /* start-test-block */ , d /* end-test-block */) {
   // do something
 }

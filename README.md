@@ -296,6 +296,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+#### 1.0.2
+
+Documentation changes.
+
 #### 1.0.0
 
 * Added `options.blocks` to take arrays of different start and end capture blocks.

@@ -77,16 +77,16 @@ exports.strip_code = {
 
         test.done();
     },
-    pattern_options: function (test) {
+    patterns_options: function (test) {
         test.expect(1);
 
-        var file = 'pattern_options.js';
+        var file = 'patterns_options.js';
         var actual = helper.tmpReader(file);
         var expected = helper.expectedReader(file);
         test.equal(
             actual,
             expected,
-            'should ignore start and end identifiers and use the pattern option if present.'
+            'should use the patterns option if present.'
         );
 
         test.done();
@@ -159,6 +159,48 @@ exports.strip_code = {
             actual,
             expected,
             'should fail to clean file properly.'
+        );
+
+        test.done();
+    },
+    legacy_pattern: function (test) {
+        test.expect(1);
+
+        var file = 'legacy_pattern.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(
+            actual,
+            expected,
+            'should use the legacy pattern option.'
+        );
+
+        test.done();
+    },
+    legacy_pattern_start_end: function (test) {
+        test.expect(1);
+
+        var file = 'legacy_pattern_start_end.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(
+            actual,
+            expected,
+            'should ignore start and end legacy comments and use the legacy pattern option if present.'
+        );
+
+        test.done();
+    },
+    legacy_start_end: function (test) {
+        test.expect(1);
+
+        var file = 'legacy_start_end.js';
+        var actual = helper.tmpReader(file);
+        var expected = helper.expectedReader(file);
+        test.equal(
+            actual,
+            expected,
+            'should strip the code between the legacy start and end comments.'
         );
 
         test.done();

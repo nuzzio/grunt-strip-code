@@ -56,8 +56,26 @@ module.exports = function (grunt) {
             blocks: [{
                 start_block: '/* test-code */',
                 end_block: '/* end-test-code */'
-            }]
+            }],
+            //Legacy
+            start_comment: false,
+            end_comment: false,
+            pattern: false
         });
+
+        // Legacy Checks
+        // Respecting legacy code by taking pattern, if defined,
+        // over start_comment & end_comment
+        // ----------------------------------------------------------
+        if (options.pattern !== false) {
+            options.patterns.push(options.pattern)
+        } else if (options.start_comment !== false && options.end_comment !== false) {
+            var tmpObject = {};
+            tmpObject.start_block = '/* ' + options.start_comment + ' */';
+            tmpObject.end_block = '/* ' + options.end_comment + ' */';
+            options.blocks.push(tmpObject);
+        }
+        // ----------------------------------------------------------
 
         /**
          * Process passed 'blocks' options.
@@ -155,20 +173,20 @@ module.exports = function (grunt) {
          */
         var translate = function () {
 
-            if(arguments.length === 0) {
+            if (arguments.length === 0) {
                 grunt.warn(strings[options.locale]['translate.param.missing']);
             }
 
             var key = arguments[0];
 
-            if(!(key in strings[options.locale])) {
+            if (!(key in strings[options.locale])) {
                 grunt.warn(strings[options.locale]['string.key.missing'] + ': ' + key);
             }
 
             var string = strings[options.locale][key];
 
-            for(var i = 1; i < arguments.length; i++) {
-                var replacementKey = '%'+i;
+            for (var i = 1; i < arguments.length; i++) {
+                var replacementKey = '%' + i;
                 string = string.replace(replacementKey, arguments[i]);
             }
 
@@ -187,7 +205,7 @@ module.exports = function (grunt) {
                 .replace('%x', params.start)
                 .replace('%y', (params.endLineNum + 1).toString())
                 .replace('%f', currentFile);
-            if(options.testMode === true ){
+            if (options.testMode === true) {
                 grunt.log.writeln(message);
             } else {
                 grunt.warn(message);
@@ -207,7 +225,7 @@ module.exports = function (grunt) {
             }
 
 
-            function logAnyDelimiterType (line) {
+            function logAnyDelimiterType(line) {
                 blocks.forEach(function (blockDef, blockIdx) {
                     if (blockDef.start.test(line) === true) {
                         fileStartDelimiters.push([blockIdx, lineNum, line.trim()]);
@@ -296,7 +314,7 @@ module.exports = function (grunt) {
                             caseNum: 3
                         });
                     }
-                } else if (startCount - endCount > 1){
+                } else if (startCount - endCount > 1) {
                     generateMessage({
                         start: last(blocksStack)[2],
                         pattern: line.trim(),

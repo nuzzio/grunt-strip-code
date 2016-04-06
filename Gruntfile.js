@@ -100,7 +100,7 @@ module.exports = function (grunt) {
                 options: {
                     patterns: / *console\.log\([\w\S ]+\);?\n?/g
                 },
-                src: 'test/tmp/pattern_options.js'
+                src: 'test/tmp/patterns_options.js'
             },
             dest_specified: {
                 files: [
@@ -133,6 +133,27 @@ module.exports = function (grunt) {
             },
             parity_false: {
                 src: 'test/tmp/parity-false.js'
+            },
+            legacy_pattern: {
+                options: {
+                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                },
+                src: 'test/tmp/legacy_pattern.js'
+            },
+            legacy_pattern_start_end: {
+                options: {
+                    start_comment: 'start-test-block',
+                    end_comment: 'end-test-block',
+                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                },
+                src: 'test/tmp/legacy_pattern_start_end.js'
+            },
+            legacy_start_end: {
+                options: {
+                    start_comment: 'start-test-block',
+                    end_comment: 'end-test-block'
+                },
+                src: 'test/tmp/legacy_start_end.js'
             }
         },
 

@@ -1,91 +1,198 @@
 /*
  * grunt-strip-code
- * https://github.com/philip/grunt-strip-code
+ * https://github.com/nuzzio/grunt-strip-code
  *
- * Copyright (c) 2013 Philip Walton
+ * Copyright (c) 2015 Rene Cabral
  * Licensed under the MIT license.
  */
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  // Project configuration.
-  grunt.initConfig({
-    jshint: {
-      all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>',
-      ],
-      options: {
-        jshintrc: '.jshintrc',
-      },
-    },
+    grunt.initConfig({
 
-    // Before generating any new files, remove any previously-created files.
-    clean: {
-      tests: 'tmp',
-    },
-
-    // Before running strip_code, copy the files to the tmp directory
-    copy: {
-      tests: {
-        files: [
-          {expand:true, cwd:'test/fixtures/', src: '*', dest: 'tmp/'}
-        ]
-      },
-    },
-
-    // Configuration to be run (and then tested).
-    strip_code: {
-      default_options: {
-        src: 'tmp/default_options.js',
-      },
-      start_end_options: {
-        options: {
-          start_comment: '{test}',
-          end_comment: '{/test}',
+        paths: {
+            fixtures: 'test/fixtures/',
+            expected: 'test/expected/',
+            tmp: 'test/tmp/'
         },
-        src: 'tmp/start_end_options.js',
-      },
-      pattern_options: {
-        options: {
-          pattern: / *console\.log\(['"a-z]+\)\n?/g
+
+        jshint: {
+            all: [
+                'Gruntfile.js',
+                'tasks/*.js',
+                '<%= nodeunit.tests %>'
+            ],
+            options: {
+                jshintrc: '.jshintrc'
+            }
         },
-        src: 'tmp/pattern_options.js',
-      },
-      dest_specified: {
-        files: [
-          {src: 'tmp/dest_specified.js', dest: 'tmp/dest_specified2.js'},
-        ]
-      },
-      multiple_files: {
-        src: ['tmp/multiple_files*.js', 'tmp/another_multiple_file.js']
-      },
-    },
 
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js'],
-    },
+        /**
+         * Clear old tests
+         */
+        clean: {
+            tests: 'test/tmp'
+        },
 
-  });
+        /**
+         * Copy test fixtures to the tmp directory
+         */
 
-  // Actually load this plugin's task(s).
-  grunt.loadTasks('tasks');
+        copy: {
+            tests: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= paths.fixtures %>',
+                        src: '*',
+                        dest: '<%= paths.tmp %>'
+                    }
+                ]
+            }
+        },
 
-  // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+        /**
+         * Run task on test files.
+         */
+        strip_code: {
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'copy', 'strip_code', 'nodeunit']);
+            options: {
+                testMode: true
+            },
 
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+            default_options: {
+                src: 'test/tmp/default_options.js'
+            },
+
+            strip_html_and_js_code: {
+                src: 'test/tmp/sample.html',
+                options: {
+                    blocks: [
+                        {
+                            start_block: '<!--#BEGIN DEBUG#-->',
+                            end_block: '<!--#END DEBUG#-->'
+                        },
+                        {
+                            start_block: '/* BEGIN DEBUG */',
+                            end_block: '/* END DEBUG */'
+                        }
+                    ]
+                }
+            },
+            start_end_options: {
+                options: {
+                    blocks: [
+                        {
+                            start_block: '/* {test} */',
+                            end_block: '/* {/test} */'
+                        },
+                        {
+                            start_block: '/* test-code */',
+                            end_block: '/* end-test-code */'
+                        }
+                    ]
+                },
+                src: 'test/tmp/start_end_options.js'
+            },
+            pattern_options: {
+                options: {
+                    patterns: / *console\.log\([\w\S ]+\);?\n?/g
+                },
+                src: 'test/tmp/patterns_options.js'
+            },
+            dest_specified: {
+                files: [
+                    {
+                        src: 'test/tmp/dest_specified.js',
+                        dest: 'test/tmp/dest_specified2.js'
+                    }
+                ]
+            },
+            multiple_files: {
+                src: [
+                    'test/tmp/multiple_files*.js',
+                    'test/tmp/another_multiple_file.js'
+                ]
+            },
+            intersection_false: {
+                options: {
+                    blocks: [
+                        {
+                            start_block: '/* {test} */',
+                            end_block: '/* {/test} */'
+                        },
+                        {
+                            start_block: '/* test-code */',
+                            end_block: '/* end-test-code */'
+                        }
+                    ]
+                },
+                src: 'test/tmp/intersection-false.js'
+            },
+            parity_false: {
+                src: 'test/tmp/parity-false.js'
+            },
+            legacy_pattern: {
+                options: {
+                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                },
+                src: 'test/tmp/legacy_pattern.js'
+            },
+            legacy_pattern_start_end: {
+                options: {
+                    start_comment: 'start-test-block',
+                    end_comment: 'end-test-block',
+                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                },
+                src: 'test/tmp/legacy_pattern_start_end.js'
+            },
+            legacy_start_end: {
+                options: {
+                    start_comment: 'start-test-block',
+                    end_comment: 'end-test-block'
+                },
+                src: 'test/tmp/legacy_start_end.js'
+            }
+        },
+
+        /**
+         * Run tests
+         */
+        nodeunit: {
+            all: ['test/*_test.js'],
+            options: {
+                reporter: 'verbose'
+            }
+        }
+
+    });
+
+    /**
+     * Load this plugin's task(s).
+     */
+    grunt.loadTasks('tasks');
+
+    /**
+     * Load plugins.
+     */
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+    /**
+     * - first clean the "tmp" dir
+     * - then run this plugin's task(s)
+     * - then test the result
+     */
+    grunt.registerTask('test', ['clean', 'copy', 'strip_code', 'nodeunit']);
+
+    /**
+     * - lint
+     * - run all tests
+     */
+    grunt.registerTask('default', ['jshint', 'test']);
 
 };

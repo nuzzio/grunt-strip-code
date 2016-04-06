@@ -1,2 +1,2 @@
 
-"OMG!";
+"Good Language";

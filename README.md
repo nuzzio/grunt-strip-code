@@ -1,5 +1,6 @@
 # grunt-strip-code
 
+
 The grunt-strip-code plugin is used to remove sections of code from production builds that are only needed in development and test environments. grunt-strip-code uses start and end comments to identify the code sections to strip out. For example:
 
 ```js
@@ -12,8 +13,16 @@ doNotRemoveMe();
 
 A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
 
+## Builds
+
+| Branch  | Status  |
+| :------------ |:--------------- |
+| master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+
+
 ## Getting Started
-This plugin requires Grunt `~0.4.1`
+This plugin requires Grunt `>=0.4.0 <=1.0.1`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
@@ -47,23 +56,50 @@ grunt.initConfig({
 
 ### Options
 
-#### options.start_comment
+
+#### options.blocks
+Type: `Array`
+Default value:
+
+```js
+blocks: [
+    {
+        start_block: "/* test-code */",
+        end_block: "/* end-test-code */"
+    }
+]
+```
+The `blocks` array contains one or more objects which define the boundaries of the text blocks to be deleted.
+
+#### options.blocks.start_block
 Type: `String`
-Default value: `test-code`
+Default value: `/* test-code */`
 
-The text inside the opening comment used to identify code to strip.
+The text of the opening comment used to identify code to strip.
 
-#### options.end_comment
+#### options.blocks.end_block
 Type: `String`
-Default value: `end-test-code`
+Default value: `/* end-test-code */`
 
-The text inside the closing comment used to identify code to strip.
+The text of the closing comment used to identify code to strip.
 
-#### options.pattern
-Type: `RegExp`
-Default value: (a generated RegExp matching the start and end comments)
+#### options.patterns
+Type: `array`
+Default value: `[]`
 
-If the default start and end comment matching doesn't work for you needs, you can supply your own RegExp to match against. If the `pattern` option is specified, the `start_comment` and `end_comment` options are ignored.
+You can also supply your own RegExps to match against.
+
+#### options.parityCheck
+Type: `boolean`
+Default value: `false`
+
+Turns on check that makes sure if you blocks have same amount of start/end pairs in your code.
+
+#### options.intersectionCheck
+Type: `boolean`
+Default value: `false`
+
+Turns on check that makes sure if you blocks does not intersect between each other.
 
 ### Usage Examples
 
@@ -90,6 +126,82 @@ The following source code exposes the `bar` function to the public API for testi
   return api;
 }());
 ```
+
+
+#### Specifying different start and end comment values
+The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment, and code that begins with the `<!-- start-html-test-code -->` comment and ends with the `<!-- end-html-test-code -->` comment from all `.js` files in the `dist/` folder.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      blocks: [
+        {
+          start_block: "/* start-test-block */",
+          end_block: "/* end-test-block */"
+        },
+        {
+          start_block: "<!-- start-html-test-code -->",
+          end_block: "<!-- end-html-test-code -->"
+        }
+      ]
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
+#### Using your own patterns
+
+The following configuration will remove `log()` statements from all `.js` files in the `dist/` folder
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      patterns: /log\(\)/g
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
+The `patterns` property can also take arrays of RegExp objects.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      patterns: [/log\(\)/g, / *console\.log\([\w\S ]+\);?\n?/g]
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
+
+
+
+#### Specifying source and destination.
+
+The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: { },
+    your_target: {
+      files: [
+        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
+        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'}
+      ]
+    }
+  },
+})
+```
+
+
+### Backward Compatibility with Version 0.1.2
 
 
 #### Specifying different start and end comment values
@@ -122,28 +234,21 @@ grunt.initConfig({
 })
 ```
 
-#### Specifying source and destination.
 
-The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.
-
-```js
-grunt.initConfig({
-  strip_code: {
-    options: { },
-    target: {
-      files: [
-        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
-        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'}
-      ]
-    }
-  },
-})
-```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+
+#### 1.0.0
+
+* Added `options.blocks` to take arrays of different start and end capture blocks.
+* Added flag for intersectionCheck.
+* Added flag for parityCheck.
+* Major updates to package.json.
+* Added Travis CI
+* Added backward compatibility.
 
 #### 0.1.2
 

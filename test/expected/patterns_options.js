@@ -1,0 +1,3 @@
+function free () {
+  doSomething();
+}

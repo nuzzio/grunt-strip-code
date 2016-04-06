@@ -151,6 +151,74 @@ grunt.initConfig({
 })
 ```
 
+#### Using your own patterns
+
+The following configuration will remove `log()` statements from all `.js` files in the `dist/` folder
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      patterns: /log\(\)/g
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
+The `patterns` property can also take arrays of RegExp objects.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      patterns: [/log\(\)/g, / *console\.log\([\w\S ]+\);?\n?/g]
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
+
+
+
+#### Specifying source and destination.
+
+The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: { },
+    your_target: {
+      files: [
+        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
+        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'}
+      ]
+    }
+  },
+})
+```
+
+
+### Backward Compatibility with Version 0.1.2
+
+
+#### Specifying different start and end comment values
+The following configuration will strip out code that begins with the `/* start-test-block */` comment and ends with the `/* end-test-block */` comment from all `.js` files in the `dist/` folder.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    options: {
+      start_comment: 'start-test-block',
+      end_comment: 'end-test-block',
+    },
+    src: 'dist/*.js'
+  },
+})
+```
+
 #### Using your own pattern
 
 The following configuration will remove `log()` statements from all `.js` files in the `dist/` folder
@@ -166,28 +234,21 @@ grunt.initConfig({
 })
 ```
 
-#### Specifying source and destination.
 
-The normal behavior is to strip out code in the source files and then save those files with the same name. If you need to save them to a different name, you can specify a `dest` option as well.
-
-```js
-grunt.initConfig({
-  strip_code: {
-    options: { },
-    your_target: {
-      files: [
-        {src: 'tmp/my-app.js', dest: 'dist/my-app.js'},
-        {src: 'tmp/my-lib.js', dest: 'dist/my-lib.js'},
-      ]
-    }
-  },
-})
-```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+
+#### 1.0.0
+
+* Added `options.blocks` to take arrays of different start and end capture blocks.
+* Added flag for intersectionCheck.
+* Added flag for parityCheck.
+* Major updates to package.json.
+* Added Travis CI
+* Added backward compatibility.
 
 #### 0.1.2
 

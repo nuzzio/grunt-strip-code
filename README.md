@@ -207,6 +207,51 @@ grunt.initConfig({
 ```
 
 
+#### Specifying Multiple `strip_code` Tasks.
+
+```js
+grunt.initConfig({
+  strip_code: {
+    strip_html_and_js_: {
+      options: {
+        blocks: [{
+          start_block: "/* start-test-block */",
+          end_block: "/* end-test-block */"
+        }, {
+          start_block: "<!-- start-html-test-code -->",
+          end_block: "<!-- end-html-test-code -->"
+        }]
+      },
+      src: 'src/*.html'
+
+    },
+    strip_php: {
+      options: {
+        blocks: [{
+          start_block: "/* start-test-block */",
+          end_block: "/* end-test-block */"
+        }]
+      },
+      src: ['src/file1.php', 'src/file2.php']
+    },
+    strip_log_: {
+      options: {
+        patterns: /log\(\)/g
+      },
+      files: [{
+        src: 'src/src-test.js',
+        dest: 'dest/src-test.js'
+      }, {
+        src: 'src/src-test2.js',
+        dest: 'dest/src-test2.js'
+      }]
+
+    }
+  },
+})
+```
+
+
 ### Backward Compatibility with Version 0.1.2
 
 

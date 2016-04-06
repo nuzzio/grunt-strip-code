@@ -146,7 +146,9 @@ grunt.initConfig({
         }
       ]
     },
-    src: 'dist/*.js'
+    your_target: {
+      src: 'dist/*.js'
+    }
   },
 })
 ```
@@ -174,7 +176,9 @@ grunt.initConfig({
     options: {
       patterns: [/log\(\)/g, / *console\.log\([\w\S ]+\);?\n?/g]
     },
-    src: 'dist/*.js'
+    your_target: {
+      src: 'dist/*.js'
+    }
   },
 })
 ```

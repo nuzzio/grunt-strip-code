@@ -146,7 +146,9 @@ grunt.initConfig({
         }
       ]
     },
-    src: 'dist/*.js'
+    your_target: {
+        src: 'dist/*.js'
+    }
   },
 })
 ```
@@ -161,7 +163,9 @@ grunt.initConfig({
     options: {
       patterns: /log\(\)/g
     },
-    src: 'dist/*.js'
+    your_target: {
+        src: 'dist/*.js'
+    }
   },
 })
 ```
@@ -174,7 +178,9 @@ grunt.initConfig({
     options: {
       patterns: [/log\(\)/g, / *console\.log\([\w\S ]+\);?\n?/g]
     },
-    src: 'dist/*.js'
+    your_target: {
+        src: 'dist/*.js'
+    }
   },
 })
 ```
@@ -214,7 +220,9 @@ grunt.initConfig({
       start_comment: 'start-test-block',
       end_comment: 'end-test-block',
     },
-    src: 'dist/*.js'
+    your_target: {
+        src: 'dist/*.js'
+    }
   },
 })
 ```
@@ -229,7 +237,9 @@ grunt.initConfig({
     options: {
       pattern: /log\(\)/g
     },
-    src: 'dist/*.js'
+    your_target: {
+        src: 'dist/*.js'
+    }
   },
 })
 ```

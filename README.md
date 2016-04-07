@@ -13,12 +13,12 @@ doNotRemoveMe();
 
 A use-case for this practice is to make private JavaScript functions accessible to unit tests without exposing them in production builds. This [blog post](http://philipwalton.com/articles/how-to-unit-test-private-functions-in-javascript/) goes into more detail about the concept and implementation.
 
-## Builds
+## Stats
 
-| Branch  | Status  |
-| :------------ |:--------------- |
-| master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) |
-| develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| Branch  | Built Status  | Test Coverage |
+| :------------ |:--------------- | :--------------- |
+| master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=feature%2Fintegrate-coveralls)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=master) |
+| develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=feature%2Fintegrate-coveralls)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=develop) |
 
 
 ## Getting Started

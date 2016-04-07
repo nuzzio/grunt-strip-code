@@ -30,7 +30,7 @@
     "escape-string-regexp": "~1.0.3"
   },
   "devDependencies": {
-    "grunt": ">=0.4.0 <=1.0.1",
+    "grunt": ">=0.4.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^1.0.0",
@@ -40,7 +40,7 @@
     "jshint-stylish": "^2.1.0"
   },
   "peerDependencies": {
-    "grunt": ">=0.4.0 <=1.0.1"
+    "grunt": ">=0.4.0"
   },
   "keywords": [
     "gruntplugin",

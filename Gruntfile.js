@@ -10,22 +10,28 @@
 
 module.exports = function (grunt) {
 
+    var coverage = process.env.GRUNT_STRIP_CODE_COVERAGE;
+
     grunt.initConfig({
 
         paths: {
             fixtures: 'test/fixtures/',
             expected: 'test/expected/',
-            tmp: 'test/tmp/'
+            tmp: 'test/tmp/',
+            nodeunit: {
+                tests: 'test/**/*_test.js'
+            }
         },
 
         jshint: {
             all: [
                 'Gruntfile.js',
                 'tasks/*.js',
-                '<%= nodeunit.tests %>'
+                '<%= paths.nodeunit.tests %>'
             ],
             options: {
-                jshintrc: '.jshintrc'
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
             }
         },
 
@@ -163,16 +169,34 @@ module.exports = function (grunt) {
         nodeunit: {
             all: ['test/*_test.js'],
             options: {
-                reporter: 'verbose'
+                reporter: coverage ? 'lcov' : 'verbose',
+                reporterOutput: coverage ? 'coverage/all-file-comparison_test.lcov' : undefined
+            }
+        },
+
+        jscoverage: {
+            tasks: {
+                expand: true,
+                cwd: 'tasks/',
+                src: '*.js',
+                dest: 'coverage/tasks/'
+            }
+        },
+
+        coveralls: {
+            tests: {
+                // LCOV coverage file (can be string, glob or array)
+                src: 'coverage/all-file-comparison_test.lcov'
             }
         }
+
 
     });
 
     /**
      * Load this plugin's task(s).
      */
-    grunt.loadTasks('tasks');
+    grunt.loadTasks(coverage ? 'coverage/tasks' : 'tasks');
 
     /**
      * Load plugins.
@@ -181,18 +205,22 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    grunt.loadNpmTasks('grunt-jscoverage');
+    grunt.loadNpmTasks('grunt-coveralls');
 
     /**
      * - first clean the "tmp" dir
      * - then run this plugin's task(s)
      * - then test the result
      */
-    grunt.registerTask('test', ['clean', 'copy', 'strip_code', 'nodeunit']);
+    grunt.registerTask('test', ['jshint', 'clean', 'copy', 'strip_code', 'nodeunit']);
+    grunt.registerTask('instrument', ['jscoverage']);
+    grunt.registerTask('post_coverage', ['test', 'coveralls']);
 
     /**
      * - lint
      * - run all tests
      */
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('default', ['test']);
 
 };

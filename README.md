@@ -15,7 +15,7 @@ A use-case for this practice is to make private JavaScript functions accessible 
 
 ## Stats
 
-| Branch  | Built Status  | Test Coverage |
+| Branch  | CI  | Tests |
 | :------------ |:--------------- | :--------------- |
 | master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=feature%2Fintegrate-coveralls)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=master) |
 | develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=feature%2Fintegrate-coveralls)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=develop) |

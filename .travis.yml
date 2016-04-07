@@ -6,3 +6,7 @@ node_js:
 before_install: npm install -g grunt-cli
 install: npm install
 sudo: false
+script:
+  - npm test
+  - npm check_coverage
+  - npm post_coverage

@@ -63,12 +63,45 @@ module.exports = function (grunt) {
             pattern: false
         });
 
+        /**
+         * Takes in dynamic parameters and expects first param to be a key for a string,
+         * subsequent params will substitute the variables in the string
+         * in the order they are declared.
+         *
+         * For the string: "my.key": "I will do my %1 then my %2"
+         * translate('my.key', 'first replacement', 'second replacement')
+         * the first replacement argument will replace %1, second %2 and so on.
+         *
+         * @param key string
+         */
+        var translate = function () {
+
+            if (arguments.length === 0) {
+                grunt.warn(strings[options.locale]['translate.param.missing']);
+            }
+
+            var key = arguments[0];
+
+            if (!(key in strings[options.locale])) {
+                grunt.warn(strings[options.locale]['string.key.missing'] + ': ' + key);
+            }
+
+            var string = strings[options.locale][key];
+
+            for (var i = 1; i < arguments.length; i++) {
+                var replacementKey = '%' + i;
+                string = string.replace(replacementKey, arguments[i]);
+            }
+
+            return string;
+        };
+        
         // Legacy Checks
         // Respecting legacy code by taking pattern, if defined,
         // over start_comment & end_comment
         // ----------------------------------------------------------
         if (options.pattern !== false) {
-            options.patterns.push(options.pattern)
+            options.patterns.push(options.pattern);
         } else if (options.start_comment !== false && options.end_comment !== false) {
             var tmpObject = {};
             tmpObject.start_block = '/* ' + options.start_comment + ' */';
@@ -159,40 +192,6 @@ module.exports = function (grunt) {
                 return item.block;
             })
         );
-
-        /**
-         * Takes in dynamic parameters and expects first param to be a key for a string,
-         * subsequent params will substitute the variables in the string
-         * in the order they are declared.
-         *
-         * For the string: "my.key": "I will do my %1 then my %2"
-         * translate('my.key', 'first replacement', 'second replacement')
-         * the first replacement argument will replace %1, second %2 and so on.
-         *
-         * @param key string
-         */
-        var translate = function () {
-
-            if (arguments.length === 0) {
-                grunt.warn(strings[options.locale]['translate.param.missing']);
-            }
-
-            var key = arguments[0];
-
-            if (!(key in strings[options.locale])) {
-                grunt.warn(strings[options.locale]['string.key.missing'] + ': ' + key);
-            }
-
-            var string = strings[options.locale][key];
-
-            for (var i = 1; i < arguments.length; i++) {
-                var replacementKey = '%' + i;
-                string = string.replace(replacementKey, arguments[i]);
-            }
-
-            return string;
-        };
-
 
         /**
          * Generates error messages for block and pattern errors then quits.

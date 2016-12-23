@@ -173,8 +173,7 @@ module.exports = function (grunt) {
                 escapeStringRegexp(raw_blocks.start_block),
                 '[\\s\\S]*?',
                 escapeStringRegexp(raw_blocks.end_block),
-                '[\\t ]*',
-                escapeStringRegexp(grunt.util.linefeed) + '?'
+                '[\\t ]*?'
             ];
 
             return {

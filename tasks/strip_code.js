@@ -60,8 +60,33 @@ module.exports = function (grunt) {
             //Legacy
             start_comment: false,
             end_comment: false,
-            pattern: false
+            pattern: false,
+            eol: ''
         });
+
+
+        //
+        // Allow custom end-of-line, if specified.
+        //
+        var endOfLine;
+
+        switch(options.eol) {
+          case 'cr':
+            endOfLine = '\r';
+            break;
+
+          case 'lf':
+            endOfLine = '\n';
+            break;
+
+          case 'crlf':
+            endOfLine = '\r\n';
+            break;
+
+          default:
+            endOfLine = grunt.util.linefeed;
+            break;
+        }
 
         /**
          * Takes in dynamic parameters and expects first param to be a key for a string,
@@ -174,7 +199,7 @@ module.exports = function (grunt) {
                 '[\\s\\S]*?',
                 escapeStringRegexp(raw_blocks.end_block),
                 '[\\t ]*',
-                escapeStringRegexp(grunt.util.linefeed) + '?'
+                escapeStringRegexp(endOfLine) + '?'
             ];
 
             return {
@@ -370,7 +395,7 @@ module.exports = function (grunt) {
                 /**
                  * Process every line of the current file with main 'check' function
                  */
-                contents.split(grunt.util.linefeed).forEach(checkLine);
+                contents.split(endOfLine).forEach(checkLine);
 
                 /**
                  * Strip block match from file

@@ -101,6 +101,13 @@ Default value: `false`
 
 Turns on check that makes sure if you blocks does not intersect between each other.
 
+#### options.eol
+Type: `String`
+Choices: `'lf'`, `'cr'`, `'crlf'`
+Default value: `''`
+
+Unless one of the choices is explicitly specified, end-of-line defaults to the operating system specific character(s).
+
 ### Usage Examples
 
 The following source code exposes the `bar` function to the public API for testing, but the `bar` function should not be accessible in the released library. grunt-strip-code (with the default options) will remove the comment blocks from the example below keeping the `bar` function private in production:

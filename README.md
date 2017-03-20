@@ -304,6 +304,10 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+#### 1.0.5
+
+Custom line endings contributed.
+
 #### 1.0.4
 
 Added Coveralls.

@@ -64,23 +64,10 @@ module.exports = function (grunt) {
         });
 
         //
-        // Allow custom end-of-line, if specified.
+        // Set end of line
         //
-        var endOfLine;
+        var endOfLine = grunt.util.linefeed;
 
-        switch(options.eol) {
-          case 'lf':
-            endOfLine = '\n';
-            break;
-
-          case 'crlf':
-            endOfLine = '\r\n';
-            break;
-
-          default:
-            endOfLine = grunt.util.linefeed;
-            break;
-        }
 
         /**
          * Takes in dynamic parameters and expects first param to be a key for a string,

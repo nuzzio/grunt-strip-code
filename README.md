@@ -281,6 +281,8 @@ grunt.initConfig({
 
 #### Using your own pattern
 
+Note: if legacy `pattern` is declared, it will supercede legacy `start_comment` and `end_comment`.
+
 The following configuration will remove `log()` statements from all `.js` files in the `dist/` folder
 
 ```js

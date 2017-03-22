@@ -10,8 +10,9 @@ branches:
     - develop
 
 # scripts that are called at very beginning, before repo cloning
+# convert LF endings into CRLF when you check out the code
 init:
-  - git config --global core.autocrlf input
+  - git config --global core.autocrlf true
 
 # What combinations to test
 environment:

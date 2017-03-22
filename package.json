@@ -22,6 +22,7 @@
   },
   "scripts": {
     "test": "grunt test",
+    "posttest": "npm run check_coverage && npm run post_coverage",
     "check_coverage": "grunt instrument && GRUNT_STRIP_CODE_COVERAGE=1 grunt test",
     "post_coverage": "grunt instrument && GRUNT_STRIP_CODE_COVERAGE=1 grunt post_coverage"
   },

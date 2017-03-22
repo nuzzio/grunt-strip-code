@@ -376,7 +376,7 @@ module.exports = function (grunt) {
                 /**
                  * Process every line of the current file with main 'check' function
                  */
-                contents.split(endOfLine).forEach(checkLine);
+                contents.split('\r\n').forEach(checkLine);
 
                 /**
                  * Strip block match from file

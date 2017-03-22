@@ -46,7 +46,6 @@ module.exports = function (grunt) {
         errors[2] = "missing.start.block";
         errors[3] = "extra.start.block";
 
-
         var options = this.options({
             testMode: false,
             intersectionCheck: true,
@@ -63,7 +62,6 @@ module.exports = function (grunt) {
             pattern: false,
             eol: ''
         });
-
 
         //
         // Allow custom end-of-line, if specified.

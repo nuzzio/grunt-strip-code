@@ -23,6 +23,7 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
+  - npm -g install grunt-cli
 
 test_script:
   # Output useful info for debugging

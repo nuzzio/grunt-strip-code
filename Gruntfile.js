@@ -104,7 +104,7 @@ module.exports = function (grunt) {
             },
             pattern_options: {
                 options: {
-                    patterns: / *console\.log\([\w\S ]+\);?\n?/g
+                    patterns: / *console\.log\([\w\S ]+\);?(?:\n|\r\n)?/g
                 },
                 src: 'test/tmp/patterns_options.js'
             },
@@ -142,7 +142,7 @@ module.exports = function (grunt) {
             },
             legacy_pattern: {
                 options: {
-                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                    pattern: / *console\.log\([\w\S ]+\);?(?:\n|\r\n)?/g
                 },
                 src: 'test/tmp/legacy_pattern.js'
             },
@@ -150,7 +150,7 @@ module.exports = function (grunt) {
                 options: {
                     start_comment: 'start-test-block',
                     end_comment: 'end-test-block',
-                    pattern: / *console\.log\([\w\S ]+\);?\n?/g
+                    pattern: / *console\.log\([\w\S ]+\);?(?:\n|\r\n)?/g
                 },
                 src: 'test/tmp/legacy_pattern_start_end.js'
             },

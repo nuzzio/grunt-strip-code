@@ -193,7 +193,7 @@ module.exports = function (grunt) {
                 '[\\s\\S]*?',
                 escapeStringRegexp(raw_blocks.end_block),
                 '[\\t ]*',
-                escapeStringRegexp(endOfLine) + '?'
+                endOfLine + '?'
             ];
 
             return {

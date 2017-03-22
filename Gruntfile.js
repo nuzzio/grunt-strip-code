@@ -160,30 +160,6 @@ module.exports = function (grunt) {
                     end_comment: 'end-test-block'
                 },
                 src: 'test/tmp/legacy_start_end.js'
-            },
-            custom_eol_lf: {
-              options: {
-                eol: 'lf',
-                blocks: [
-                {
-                  start_block: '/* exclude:start */',
-                  end_block: '/* exclude:stop */'
-                }
-                ]
-              },
-              src: 'test/tmp/custom_eol1.js'
-            },
-            custom_eol_crlf: {
-              options: {
-                eol: 'crlf',
-                blocks: [
-                {
-                  start_block: '/* exclude:start */',
-                  end_block: '/* exclude:stop */'
-                }
-                ]
-              },
-              src: 'test/tmp/custom_eol2.js'
             }
         },
 

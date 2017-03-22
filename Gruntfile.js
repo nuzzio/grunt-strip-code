@@ -88,6 +88,7 @@ module.exports = function (grunt) {
                 }
             },
             start_end_options: {
+                src: 'test/tmp/start_end_options.js',
                 options: {
                     blocks: [
                         {
@@ -99,8 +100,7 @@ module.exports = function (grunt) {
                             end_block: '/* end-test-code */'
                         }
                     ]
-                },
-                src: 'test/tmp/start_end_options.js'
+                }
             },
             pattern_options: {
                 options: {

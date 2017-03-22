@@ -8,3 +8,6 @@ install: npm install
 sudo: false
 script:
   - npm test
+after_success:
+  - npm run check_coverage
+  - npm run post_coverage

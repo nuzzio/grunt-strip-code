@@ -9,6 +9,10 @@ branches:
     - master
     - develop
 
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+
 # What combinations to test
 environment:
   matrix:

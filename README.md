@@ -321,7 +321,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 #### 1.0.6
 
 * Added Windows tests on AppVeyor.
-* Removed custom line endings: [https://github.com/nuzzio/grunt-strip-code/pull/20#issuecomment-288547746](See PR comment)
+* Removed custom line endings.
 
 
 #### 1.0.5

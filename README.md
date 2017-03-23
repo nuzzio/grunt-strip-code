@@ -27,8 +27,8 @@ AppVeyor
 
 | Branch  | CI  |
 | :------------ |:--------------- |
-| master        | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/master?svg=true)](https://travis-ci.org/nuzzio/grunt-strip-code) |
-| develop   | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/develop?svg=true)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| master        | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/master?svg=true)](https://ci.appveyor.com/project/nuzzio/grunt-strip-code) |
+| develop   | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/develop?svg=true)](https://ci.appveyor.com/project/nuzzio/grunt-strip-code) |
 
 
 

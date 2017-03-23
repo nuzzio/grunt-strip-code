@@ -15,10 +15,22 @@ A use-case for this practice is to make private JavaScript functions accessible 
 
 ## Stats
 
+Travis CI
+
 | Branch  | CI  | Tests |
 | :------------ |:--------------- | :--------------- |
 | master        | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=master)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=master) |
 | develop   | [![Build Status](https://travis-ci.org/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.org/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=develop)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=develop) |
+
+
+AppVeyor
+
+| Branch  | CI  |
+| :------------ |:--------------- |
+| master        | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/master?svg=true)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+| develop   | [![Build Status](https://ci.appveyor.com/api/projects/status/nko1optg81v0kew2/branch/develop?svg=true)](https://travis-ci.org/nuzzio/grunt-strip-code) |
+
+
 
 
 ## Getting Started
@@ -305,6 +317,12 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+
+#### 1.0.6
+
+* Added Windows tests on AppVeyor.
+* Removed custom line endings: [https://github.com/nuzzio/grunt-strip-code/pull/20#issuecomment-288547746](See PR comment)
+
 
 #### 1.0.5
 

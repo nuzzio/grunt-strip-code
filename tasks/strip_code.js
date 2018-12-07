@@ -24,6 +24,7 @@ module.exports = function (grunt) {
         var fileStartDelimiters = [];
         var fileEndDelimiters = [];
         var strings = {};
+        var strippedCount = 0;
 
         strings.en_us = {
             "missing.end.block": "Missing end block: in file `%f` for start block `%p` at line %n.",
@@ -37,7 +38,8 @@ module.exports = function (grunt) {
             "translate.param.missing": "translate() function must have at least a string key parameter.",
             "striped.file.saved.file": "Stripped code from file: `%1`, and saved it to: `%2`.",
             "nothing.striped.file.saved.file": "No code was stripped from file: `%1`,it was saved to: `%2`.",
-            "string.key.missing": "String key not found"
+            "string.key.missing": "String key not found",
+            "stripped.summary": "Stripped %1 files."
         };
 
         var errors = [];
@@ -101,7 +103,7 @@ module.exports = function (grunt) {
 
             return string;
         };
-        
+
         // Legacy Checks
         // Respecting legacy code by taking pattern, if defined,
         // over start_comment & end_comment
@@ -345,6 +347,7 @@ module.exports = function (grunt) {
         this.files.forEach(function (f) {
             f.src.forEach(function (filepath) {
                 var message = null;
+                var isFileStripped = false;
                 fileStartDelimiters = [];
                 fileEndDelimiters = [];
 
@@ -387,6 +390,8 @@ module.exports = function (grunt) {
 
                 if (contents !== replacement) {
                     message = translate('striped.file.saved.file', filepath, destination);
+                    isFileStripped = true;
+                    strippedCount++;
                 } else {
                     message = translate('nothing.striped.file.saved.file', filepath, destination);
                 }
@@ -394,17 +399,18 @@ module.exports = function (grunt) {
                 /**
                  * Write file to its destination.
                  */
-                grunt.file.write(destination, replacement);
+                if (isFileStripped || filepath !== destination) {
+                    grunt.file.write(destination, replacement);
+                }
 
                 /**
                  * Log file strip status and write destination.
                  */
-                grunt.log.writeln(message);
-
+                grunt.verbose.writeln(message);
             });
         });
 
-
+        grunt.verbose.writeln('');
+        grunt.log.writeln(translate('stripped.summary', strippedCount));
     });
 };
-

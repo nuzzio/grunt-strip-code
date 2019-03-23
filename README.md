@@ -318,6 +318,11 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+#### 1.0.7
+
+* Log only number of changed files, you have to use grunt verbose to get verbose logs.
+* Write to disk only if the file contents changed, or the destination changed.
+
 #### 1.0.6
 
 * Added Windows tests on AppVeyor.

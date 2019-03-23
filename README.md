@@ -320,8 +320,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 #### 1.0.7
 
-* Log only number of changed files, you have to use grunt verbose to get verbose logs.
-* Write to disk only if the file contents changed, or the destination changed.
+* Log only number of changed files, you have to use grunt verbose (`--verbose`, `-v`) to get verbose logs.
+* Write to disk only if the file contents were changed, or if the file destination is different from the source.
 
 #### 1.0.6
 

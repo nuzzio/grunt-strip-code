@@ -399,9 +399,7 @@ module.exports = function (grunt) {
                 /**
                  * Write file to its destination.
                  */
-                if (isFileStripped || filepath !== destination) {
-                    grunt.file.write(destination, replacement);
-                }
+                grunt.file.write(destination, replacement);
 
                 /**
                  * Log file strip status and write destination.
@@ -410,7 +408,7 @@ module.exports = function (grunt) {
             });
         });
 
-        grunt.verbose.writeln('');
         grunt.log.writeln(translate('stripped.summary', strippedCount));
+        grunt.verbose.writeln('');
     });
 };

@@ -319,7 +319,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 
 #### 1.0.7
-
+* Upgraded to travis-ci.com
 * Log only number of changed files, you have to use grunt verbose (`--verbose`, `-v`) to get verbose logs.
 * Write to disk only if the file contents were changed, or if the file destination is different from the source.
 

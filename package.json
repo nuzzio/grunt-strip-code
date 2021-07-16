@@ -40,7 +40,7 @@
     "jshint-stylish": "^2.2.1"
   },
   "peerDependencies": {
-    "grunt": "^1.4.1"
+    "grunt": ">=0.4.0"
   },
   "keywords": [
     "gruntplugin",

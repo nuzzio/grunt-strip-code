@@ -399,7 +399,9 @@ module.exports = function (grunt) {
                 /**
                  * Write file to its destination.
                  */
-                grunt.file.write(destination, replacement);
+                if (isFileStripped || filepath !== destination) {
+                    grunt.file.write(destination, replacement);
+                }
 
                 /**
                  * Log file strip status and write destination.

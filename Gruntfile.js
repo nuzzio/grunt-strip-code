@@ -174,7 +174,7 @@ module.exports = function (grunt) {
             }
         },
 
-        jscoverage: {
+        jscover: {
             tasks: {
                 expand: true,
                 cwd: 'tasks/',
@@ -205,7 +205,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
-    grunt.loadNpmTasks('grunt-jscoverage');
+    grunt.loadNpmTasks('grunt-jscover');
     grunt.loadNpmTasks('grunt-coveralls');
 
     /**
@@ -214,7 +214,7 @@ module.exports = function (grunt) {
      * - then test the result
      */
     grunt.registerTask('test', ['jshint', 'clean', 'copy', 'strip_code', 'nodeunit']);
-    grunt.registerTask('instrument', ['jscoverage']);
+    grunt.registerTask('instrument', ['jscover']);
     grunt.registerTask('post_coverage', ['test', 'coveralls']);
 
     /**

@@ -19,8 +19,8 @@ Travis CI
 
 | Branch  | CI  | Tests |
 | :------------ |:--------------- | :--------------- |
-| master        | [![Build Status](https://travis-ci.com/nuzzio/grunt-strip-code.svg?branch=master)](https://travis-ci.com/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=master)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=master) |
-| develop   | [![Build Status](https://travis-ci.com/nuzzio/grunt-strip-code.svg?branch=develop)](https://travis-ci.com/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=develop)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=develop) |
+| master        | [![Build Status](https://app.travis-ci.com/nuzzio/grunt-strip-code.svg?branch=master)](https://app.travis-ci.com/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=master)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=master) |
+| develop   | [![Build Status](https://app.travis-ci.com/nuzzio/grunt-strip-code.svg?branch=develop)](https://app.travis-ci.com/nuzzio/grunt-strip-code) | [![Coverage Status](https://coveralls.io/repos/github/nuzzio/grunt-strip-code/badge.svg?branch=develop)](https://coveralls.io/github/nuzzio/grunt-strip-code?branch=develop) |
 
 
 AppVeyor

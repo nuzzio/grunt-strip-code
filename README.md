@@ -318,6 +318,13 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+#### 1.0.10
+
+* Updated security dev dependencies.
+* Updated travis-ci badges
+* Updated Read Me
+
+
 #### 1.0.9
 
 * Fixed Coveralls dependency error for test coverage report

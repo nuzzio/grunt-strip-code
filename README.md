@@ -318,7 +318,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-#### 1.0.10
+#### 1.0.10 - 1.0.11
 
 * Updated security dev dependencies.
 * Updated travis-ci badges

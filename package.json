@@ -1,7 +1,7 @@
 {
   "name": "grunt-strip-code",
   "description": "Remove dev and test only code in production builds",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "homepage": "https://github.com/nuzzio/grunt-strip-code",
   "author": {
     "name": "Rene Cabral",
@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "coffee-script": "^1.12.7",
-    "ejs": ">=2.5.5",
-    "grunt": "^1.5.2",
+    "ejs": "^3.1.7",
+    "grunt": "^1.5.3",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^3.0.0",

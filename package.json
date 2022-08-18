@@ -18,7 +18,7 @@
   "license": "MIT",
   "main": "Gruntfile.js",
   "engines": {
-    "node": ">= 10.16.0"
+    "node": ">= 12.22.12"
   },
   "scripts": {
     "test": "grunt test",
@@ -36,14 +36,13 @@
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^3.0.0",
-    "grunt-contrib-nodeunit": "^3.0.0",
+    "grunt-contrib-nodeunit": "^4.0.0",
     "grunt-coveralls": "^2.0.0",
-    "grunt-jscover": "^0.0.1",
-    "jscover": "^1.0.0",
     "jshint-stylish": "^2.2.1",
-    "minimist": "^1.2.6",
+    "tap": "^16.3.0",
     "uglify-js": ">=2.6.0",
-    "underscore": ">=1.12.1"
+    "underscore": ">=1.12.1",
+    "minimist": ">=1.2.6"
   },
   "peerDependencies": {
     "grunt": ">=0.5.2"
